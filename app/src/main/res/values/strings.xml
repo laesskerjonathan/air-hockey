@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Air Hockey</string>
+    <string name="single_player">Single Player</string>
+</resources>
