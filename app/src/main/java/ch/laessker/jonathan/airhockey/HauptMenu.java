@@ -10,7 +10,4 @@ public class HauptMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_haupt_menu);
     }
-
-
-    public void buttonPressed
 }
