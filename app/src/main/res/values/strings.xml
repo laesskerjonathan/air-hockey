@@ -4,4 +4,26 @@
     <string name="settings">Settings</string>
     <string name="highscore">Highscore</string>
     <string name="statistics">Statistics</string>
+    <string name="game_name">JoGiRo Air Hockey</string>
+    <string name="music_effects">Effects</string>
+    <string name="music_soundtrack">Soundtrack</string>
+    <string name="difficulty">Difficulty</string>
+    <string-array name="difficulty_levels">
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
+    </string-array>
+    <string name="easy">Easy</string>
+    <string name="medium">Medium</string>
+    <string name="hard">Hard</string>
+    <string name="save_settings">Save Settings</string>
+    <string name="player_points">Player Points</string>
+    <string name="enemy_points">Enemy Points</string>
+    <string name="play_time">Play Time</string>
+    <string name="new_game">New Game</string>
+    <string name="load_game">Load Game</string>
+    <string name="pause">Pause</string>
+    <string name="continue_game">Continue Game</string>
+    <string name="save_game">Save Game</string>
+
 </resources>
