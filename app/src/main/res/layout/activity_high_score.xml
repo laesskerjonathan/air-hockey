@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/activity_highscore"
+
+    tools:context="ch.laessker.jonathan.airhockey.HighScore">
+
+<TextView
+    android:text="@string/highscore"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/textView1"
+    android:padding="3dp" />
+
+
+<TableRow>
+    <TextView
+        android:text="player name 1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/hs_player_name1"
+        android:padding="3dp" />
+    <TextView
+        android:text="333"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/player1_points"
+        android:padding="3dp"/>
+</TableRow>
+
+    <TableRow>
+        <TextView
+            android:text="player name 2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/hs_player2_name"
+            android:padding="3dp" />
+        <TextView
+            android:text="332"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/player2_points"
+            android:padding="3dp"/>
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:text="player name 3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/hs_player3_name"
+            android:padding="3dp" />
+        <TextView
+            android:text="33"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/player3_points"
+            android:padding="3dp"/>
+    </TableRow>
+
+</TableLayout>
