@@ -51,6 +51,7 @@ public class HauptMenu extends AppCompatActivity {
                 startActivity(i);
             }
         });
+        //TODO: Load Settings from Database and start the FUN (Music & Effects)
     }
 
 }
