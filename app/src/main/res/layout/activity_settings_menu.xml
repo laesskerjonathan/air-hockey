@@ -17,22 +17,22 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="70dp"
-        android:id="@+id/switch1" />
+        android:id="@+id/switch_effects" />
 
     <Switch
         android:text="@string/music_soundtrack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/switch1"
-        android:layout_alignStart="@+id/switch1"
+        android:layout_below="@+id/switch_effects"
+        android:layout_alignStart="@+id/switch_effects"
         android:layout_marginTop="32dp"
-        android:id="@+id/switch2" />
+        android:id="@+id/switch_soundtrack" />
 
     <Button
         android:text="@string/save_settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/spinner2"
+        android:layout_below="@+id/spinner_difficulty"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="66dp"
         android:id="@+id/button" />
@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:id="@+id/spinner2"
+        android:id="@+id/spinner_difficulty"
         android:entries="@array/difficulty_levels"
         android:layout_below="@+id/textView"
         android:layout_alignParentStart="true" />
@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:id="@+id/textView"
-        android:layout_below="@+id/switch2"
+        android:layout_below="@+id/switch_soundtrack"
         android:layout_centerHorizontal="true" />
 
     <TextView
