@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/activity_highscore"
+    android:id="@+id/activity_high_score"
 
     tools:context="ch.laessker.jonathan.airhockey.HighScore">
 

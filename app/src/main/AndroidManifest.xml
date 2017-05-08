@@ -23,7 +23,8 @@
         <activity android:name=".Statistics" />
         <activity android:name=".SinglePlayerPreGame" />
         <activity android:name=".PauseMenu" />
-        <activity android:name=".HighScore"></activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+        <activity android:name=".HighScore"/>
+        <activity android:name=".AirHockeyActivity"/><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <meta-data
             android:name="com.google.android.gms.version"

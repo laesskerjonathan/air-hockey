@@ -12,16 +12,16 @@ import android.widget.Toast;
 
 public class AirHockeyActivity extends AppCompatActivity {
 
- //   private GLSurfaceView glSurfaceView;
- //   private boolean rendererSet = false;
+    private GLSurfaceView glSurfaceView;
+    private boolean rendererSet = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Setup GLSurfaceView
-    //    glSurfaceView = new GLSurfaceView(this);
-/*
+        glSurfaceView = new GLSurfaceView(this);
+
         // Check for OpenGL ES 2 Support
         final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         final ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
@@ -45,14 +45,12 @@ public class AirHockeyActivity extends AppCompatActivity {
         }
 
         setContentView(glSurfaceView);
-        */
-        setContentView(R.layout.activity_air_hockey);
     }
 
     /**
      * Dispatch onPause() to fragments.
      */
- /*   @Override
+    @Override
     protected void onPause() {
         super.onPause();
 
@@ -60,7 +58,7 @@ public class AirHockeyActivity extends AppCompatActivity {
         if (rendererSet) {
             glSurfaceView.onPause();
         }
-    }*/
+    }
 
     /**
      * Dispatch onResume() to fragments.  Note that for better inter-operation
@@ -71,7 +69,7 @@ public class AirHockeyActivity extends AppCompatActivity {
      * with fragments in their proper state, you should instead override
      * {@link #onResumeFragments()}.
      */
-   /* @Override
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -79,6 +77,6 @@ public class AirHockeyActivity extends AppCompatActivity {
         if (rendererSet) {
             glSurfaceView.onResume();
         }
-    }*/
+    }
 
 }
