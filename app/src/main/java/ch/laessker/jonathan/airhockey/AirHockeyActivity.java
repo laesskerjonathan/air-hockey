@@ -22,7 +22,7 @@ public class AirHockeyActivity extends AppCompatActivity {
         // Setup GLSurfaceView
         glSurfaceView = new GLSurfaceView(this);
 
-        // Check for OpenGL ES 2 Support
+        // Check for OpenGL ES 3 Support
         final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         final ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
         // Everything after || is for checking if running on emulator
@@ -34,13 +34,13 @@ public class AirHockeyActivity extends AppCompatActivity {
 
 
         if (supportsEs2) {
-            // Request an OpenGL ES 2.0 compatible context.
-            glSurfaceView.setEGLContextClientVersion(2);
+            // Request an OpenGL ES 3.0 compatible context.
+            glSurfaceView.setEGLContextClientVersion(3);
             // Assign our renderer.
             glSurfaceView.setRenderer(new AirHockeyRenderer(this));
             rendererSet = true;
         } else {
-            Toast.makeText(this, "This device does not support OpenGL ES 2.0.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "This device does not support OpenGL ES 3.0.", Toast.LENGTH_LONG).show();
             return;
         }
 

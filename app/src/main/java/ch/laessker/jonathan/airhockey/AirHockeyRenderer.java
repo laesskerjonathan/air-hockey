@@ -10,21 +10,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-import static android.opengl.GLES20.GL_FLOAT;
-import static android.opengl.GLES20.GL_LINES;
-import static android.opengl.GLES20.GL_POINTS;
-import static android.opengl.GLES20.GL_TRIANGLES;
-import static android.opengl.GLES20.glClearColor;
-import static android.opengl.GLES20.glDrawArrays;
-import static android.opengl.GLES20.glEnableVertexAttribArray;
-import static android.opengl.GLES20.glGetAttribLocation;
-import static android.opengl.GLES20.glGetUniformLocation;
-import static android.opengl.GLES20.glUniform4f;
-import static android.opengl.GLES20.glUseProgram;
-import static android.opengl.GLES20.glVertexAttribPointer;
-import static android.opengl.GLES20.glViewport;
-import static android.opengl.GLES20.glClear;
-import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
+import static android.opengl.GLES31.*;
 
 public class AirHockeyRenderer implements GLSurfaceView.Renderer {
 
@@ -100,7 +86,7 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
      * @param gl the GL interface. Use <code>instanceof</code> to
      *           test if the interface supports GL11 or higher interfaces.
      */
-    @Override
+
     public void onDrawFrame(GL10 gl) {
         // Clear the rendering surface.
         // This will wipe out all colors on the screen and fill the screen with
@@ -234,3 +220,4 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
         glViewport(0, 0, width, height);
     }
 }
+
