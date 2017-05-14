@@ -47,19 +47,38 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
         // Table Rectangle Via Triangles
         float[] tableVerticesWithTriangles = {
                 // First Triangle
-                -0.5f, -0.5f,
-                0.5f, 0.5f,
-                -0.5f, 0.5f,
+                -1.0f, -1.0f,
+                1.0f, 1.0f,
+                -1.0f, 1.0f,
                 // Second Triangle
-                -0.5f, -0.5f,
-                0.5f, -0.5f,
-                0.5f, 0.5f,
+                -1.0f, -1.0f,
+                1.0f, -1.0f,
+                1.0f, 1.0f,
                 // Center Line
-                -0.5f, 0f,
-                0.5f, 0f,
-                // Mallets
-                0f, -0.25f,
-                0f, 0.25f
+                -1.0f, 0f,
+                1.0f, 0f,
+                // Mallet1
+                //0f, -0.5f,
+                //0f, 0.25f
+                //firstTriangle
+                -0.05f,-0.75f,
+                0.05f,-0.65f,
+                -0.05f,-0.65f,
+
+                //SecondTriangle
+                -0.05f,-0.75f,
+                0.05f,-0.75f,
+                0.05f,-0.65f,
+
+                // Mallet2
+                //firstTriangle
+                -0.05f,0.75f,
+                0.05f,0.75f,
+                0.05f,0.65f,
+                //SecondTriangle
+                -0.05f,0.75f,
+                0.05f,0.65f,
+                -0.05f,0.65f
         };
 
         // Creating Space In Native Memory (Not Dalvik VM Memory) for OpenGL work
@@ -98,7 +117,7 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
         // =========================
 
         // Set the color to white
-        glUniform4f(uColorLocation, 1.0f, 1.0f, 1.0f, 1.0f);
+        glUniform4f(uColorLocation, 0.4f, 0.4f, 0.4f, 1.0f);
         // Set drawing mode to Triangles, start reading vertices from beginning of array, read (and draw) 6 vertices
         // This draws First Triangle and Second Triangle because glVertexAttribPointer() told OpenGL that each vertex consists of 2 components
         glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -114,11 +133,11 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
         // ================
         // Draw first mallet as blue, from 8th index, and 1 vertex
         glUniform4f(uColorLocation, 0.0f, 0.0f, 1.0f, 1.0f);
-        glDrawArrays(GL_POINTS, 8, 1);
+        glDrawArrays(GL_TRIANGLES, 8, 6);
 
         // Draw second mallet as red, from 9th index, and 1 vertex
         glUniform4f(uColorLocation, 1.0f, 0.0f, 0.0f, 1.0f);
-        glDrawArrays(GL_POINTS, 9, 1);
+        glDrawArrays(GL_TRIANGLES, 14, 6);
     }
 
     /**
