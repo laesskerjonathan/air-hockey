@@ -6,6 +6,7 @@ public class Player {
     private int id;
     private String name;
     private Mallet mallet;
+    private Position position;
     public Player(int id, String name,int initialScore,Mallet mallet)
     {
         setId(id);
