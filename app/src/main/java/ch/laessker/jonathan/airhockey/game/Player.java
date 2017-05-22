@@ -7,13 +7,15 @@ public class Player {
     private String name;
     private Mallet mallet;
     private Position position;
-    public Player(int id, String name,int initialScore,Mallet mallet)
-    {
+
+    public Player(int id, String name, int initialScore, Mallet mallet) {
         setId(id);
         setName(name);
         setScore(initialScore);
         setMallet(mallet);
     }
+
+    public void setPosition(Position position) { this.position = position; }
 
     public void setId(int id) {
         this.id = id;
@@ -22,25 +24,24 @@ public class Player {
     public void setMallet(Mallet mallet) {
         this.mallet = mallet;
     }
-    public void setName(String name)
-    {
+
+    public void setName(String name) {
         this.name = name;
     }
 
-    public void setScore(int score)
-    {
+    public void setScore(int score) {
         this.score = score;
     }
-    public int getId()
-    {
+
+    public int getId() {
         return this.id;
     }
-    public String getName()
-    {
+
+    public String getName() {
         return this.name;
     }
-    public int getScore()
-    {
+
+    public int getScore() {
         return this.score;
     }
 
@@ -48,8 +49,9 @@ public class Player {
         return mallet;
     }
 
-    public void incrementScore(int amount)
-    {
+    public Position getPosition() { return position; }
+
+    public void incrementScore(int amount) {
         this.score += amount;
     }
 

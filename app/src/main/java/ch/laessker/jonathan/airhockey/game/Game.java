@@ -7,14 +7,24 @@ public class Game {
     private int difficulty;
     private Player player1;
     private Player player2;
+    private Puk puk;
 
-    public Game(int id, int difficulty, Player player1, Player player2)
-    {
+    public Game(int id, int difficulty, Player player1, Player player2) {
+        this.id = id;
+        this.difficulty = difficulty;
+        this.player1 = player1;
+        this.player2 = player2;;
+        this.puk = new Puk(this.calcSpeedFromDifficulty());
+    }
+    //loaded Game
+    public Game(int id, int difficulty, Player player1, Player player2, Puk puk) {
         this.id = id;
         this.difficulty = difficulty;
         this.player1 = player1;
         this.player2 = player2;
+        this.puk = puk;
     }
+
 
     public void setId(int id) {
         this.id = id;
@@ -54,6 +64,11 @@ public class Game {
 
     public Player getPlayer2() {
         return player2;
+    }
+
+    public Speed calcSpeedFromDifficulty()
+    {
+        return new Speed(difficulty*1,difficulty*1);
     }
 
 }

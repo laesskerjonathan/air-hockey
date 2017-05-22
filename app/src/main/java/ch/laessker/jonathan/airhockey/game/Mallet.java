@@ -5,11 +5,11 @@ public class Mallet {
     // color shall be an Hex color
     private String color;
 
-    public Mallet(int id, String color)
-    {
+    public Mallet(int id, String color) {
         setId(id);
         setColor(color);
     }
+
     public void setId(int id) {
         this.id = id;
     }
