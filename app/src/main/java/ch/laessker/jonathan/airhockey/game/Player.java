@@ -6,7 +6,7 @@ public class Player {
     private int id;
     private String name;
     private Mallet mallet;
-    private Position position;
+
 
     public Player(int id, String name, int initialScore, Mallet mallet) {
         setId(id);
@@ -15,7 +15,6 @@ public class Player {
         setMallet(mallet);
     }
 
-    public void setPosition(Position position) { this.position = position; }
 
     public void setId(int id) {
         this.id = id;
@@ -48,8 +47,6 @@ public class Player {
     public Mallet getMallet() {
         return mallet;
     }
-
-    public Position getPosition() { return position; }
 
     public void incrementScore(int amount) {
         this.score += amount;

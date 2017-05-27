@@ -1,6 +1,8 @@
 package ch.laessker.jonathan.airhockey.game;
 
 
+
+
 public class Game {
     private int id;
     private int duration;
@@ -13,8 +15,9 @@ public class Game {
         this.id = id;
         this.difficulty = difficulty;
         this.player1 = player1;
-        this.player2 = player2;;
-        this.puk = new Puk(this.calcSpeedFromDifficulty());
+        this.player2 = player2;
+        Vector2d velocity = this.calcSpeedFromDifficulty();
+        this.puk = new Puk(0,0,velocity);
     }
     //loaded Game
     public Game(int id, int difficulty, Player player1, Player player2, Puk puk) {
@@ -66,9 +69,9 @@ public class Game {
         return player2;
     }
 
-    public Speed calcSpeedFromDifficulty()
+    public Vector2d calcSpeedFromDifficulty()
     {
-        return new Speed(difficulty*1,difficulty*1);
+        return new Vector2d(difficulty*1,difficulty*1);
     }
 
 

@@ -5,6 +5,7 @@ public class Mallet {
     // color shall be an Hex color
     private String color;
 
+    private Vector2d position;
     public Mallet(int id, String color) {
         setId(id);
         setColor(color);
@@ -18,12 +19,20 @@ public class Mallet {
         this.color = color;
     }
 
+    public void setPosition(Vector2d position) {
+        this.position = position;
+    }
+
     public int getId() {
         return id;
     }
 
     public String getColor() {
         return color;
+    }
+
+    public Vector2d getPosition() {
+        return position;
     }
 
     public void resetMallet() {
