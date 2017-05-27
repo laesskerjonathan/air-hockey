@@ -71,4 +71,43 @@ public class Game {
         return new Speed(difficulty*1,difficulty*1);
     }
 
+
+    public void incrementScore(int playerNo, int score)
+    {
+        if (playerNo == 1)
+            this.player1.incrementScore(score);
+        else
+        if (playerNo == 2)
+            this.player2.incrementScore(score);
+    }
+
+    public int getScore(int playerNo)
+    {
+        if (playerNo == 1)
+            return player1.getScore();
+        else
+            return player2.getScore();
+    }
+    public void increaseScore(int playerNo, int score)
+    {
+        if (playerNo == 1)
+            this.player1.incrementScore(score);
+        else
+        if (playerNo == 2)
+            this.player2.incrementScore(score);
+    }
+
+
+    //restart game
+    public void restart()
+    {
+      /*  panel.ball.resetBall();
+        panel.getPlayer(2).resetPlayer();
+        panel.getPlayer(1).resetPlayer();*/
+    }
+    private void checkWin() {
+    }
+
+
+
 }

@@ -6,7 +6,6 @@
     android:id="@+id/activity_air_hockey"
     tools:context="ch.laessker.jonathan.airhockey.AirHockeyActivity">
     <TextView
-        android:text="Hello World!"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 </RelativeLayout>

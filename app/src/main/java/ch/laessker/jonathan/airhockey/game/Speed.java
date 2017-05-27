@@ -7,6 +7,11 @@ public class Speed {
         this.xspeed = xspeed;
         this.yspeed = yspeed;
     }
+    public void setABSSpeed(double speed)
+    {
+        setXspeed(speed);
+        setYspeed(speed);
+    }
 
     public void setXspeed(double xspeed) {
         this.xspeed = xspeed;
