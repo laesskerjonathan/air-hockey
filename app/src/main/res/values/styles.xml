@@ -8,4 +8,17 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="johgirotheme" parent="Theme.AppCompat.Light.NoActionBar" >
+        <item name="android:colorPrimary">?android:attr/colorMultiSelectHighlight</item>
+        <item name="android:colorPrimaryDark">@android:color/holo_orange_dark</item>
+        <item name="android:colorAccent">@android:color/holo_green_light</item>
+        <item name="android:colorBackground">@android:color/holo_orange_light</item>
+        <item name="android:navigationBarColor">?android:attr/colorControlActivated</item>
+        <item name="android:textColorSecondaryInverse">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">?android:attr/textColorSecondaryInverse</item>
+        <item name="android:textColorPrimaryInverse">@color/colorPrimary</item>
+        <item name="android:textColorSecondary">@android:color/holo_green_dark</item>
+        <item name="android:colorForeground">@android:color/holo_purple</item>
+    </style>
+
 </resources>
