@@ -5,10 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Created by Roman Lenov on 22.04.2017.
- */
-
 public class AirHockeyDatenbank extends SQLiteOpenHelper {
 
     private static final String DATENBANK_NAME = "settings.db";
@@ -54,6 +50,11 @@ public class AirHockeyDatenbank extends SQLiteOpenHelper {
                 "playerPoints INTEGER, " +
                 "enemyPoints INTEGER, " +
                 "playTime INTEGER); ");
+        //statistic Tabelle erstellen
+        db.execSQL("CREATE TABLE highscore(" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "name TEXT " +
+                "playerPoints INTEGER); ");
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion,
