@@ -4,6 +4,7 @@ package ch.laessker.jonathan.airhockey.game;
 
 
 public class Game {
+    private final int MAXPOINTS = 10;
     private int id;
     private int duration;
     private int difficulty;
@@ -104,11 +105,24 @@ public class Game {
     //restart game
     public void restart()
     {
-      /*  panel.ball.resetBall();
-        panel.getPlayer(2).resetPlayer();
-        panel.getPlayer(1).resetPlayer();*/
+      //  panel.ball.resetBall();
+
     }
     private void checkWin() {
+        if (player1.getScore() > this.MAXPOINTS)
+        {
+            // player 1 win
+        }
+        else if(player2.getScore() > this.MAXPOINTS)
+        {
+            //player 2 wins
+        }
+        else
+        {
+            // continue playing
+            // reset puk position in the field where the goal was scored
+        }
+
     }
 
 

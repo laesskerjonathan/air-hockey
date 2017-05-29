@@ -35,5 +35,5 @@
         android:layout_below="@+id/new_game"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="38dp"
-        android:id="@+id/button3" />
+        android:id="@+id/load_game" />
 </RelativeLayout>

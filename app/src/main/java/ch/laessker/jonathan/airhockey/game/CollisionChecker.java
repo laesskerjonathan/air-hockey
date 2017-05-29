@@ -28,19 +28,19 @@ public class CollisionChecker {
 
 
         // impact speed
-        Vector2d v = (mallet.ge.velocity.subtract(ball.velocity));
-        float vn = v.dot(mtd.normalize());
+        //Vector2d v = (mallet.get.velocity.subtract(ball.velocity));
+        //float vn = v.dot(mtd.normalize());
 
         // sphere intersecting but moving away from each other already
-        if (vn > 0.0f) return;
+        //if (vn > 0.0f) return;
 
         // collision impulse
-        float i = (-(1.0f + Constants.restitution) * vn) / (im1 + im2);
-        Vector2d impulse = mtd.multiply(i);
+        //float i = (-(1.0f + Constants.restitution) * vn) / (im1 + im2);
+        //Vector2d impulse = mtd.multiply(i);
 
         // change in momentum
-        this.velocity = this.velocity.add(impulse.multiply(im1));
-        ball.velocity = ball.velocity.subtract(impulse.multiply(im2));
+        //this.velocity = this.velocity.add(impulse.multiply(im1));
+        //ball.velocity = ball.velocity.subtract(impulse.multiply(im2));
 
     }
 }
