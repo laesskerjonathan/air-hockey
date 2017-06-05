@@ -1,242 +1,292 @@
+/***
+ * Excerpted from "OpenGL ES for Android",
+ * published by The Pragmatic Bookshelf.
+ * Copyrights apply to this code. It may not be used to create training material, 
+ * courses, books, articles, and the like. Contact us if you are in doubt.
+ * We make no guarantees that this code is fit for any purpose. 
+ * Visit http://www.pragmaticprogrammer.com/titles/kbogla for more book information.
+ ***/
 package ch.laessker.jonathan.airhockey;
 
-import android.content.Context;
-import android.opengl.GLSurfaceView;
-import ch.laessker.jonathan.airhockey.util.LoggerConfig;
-import ch.laessker.jonathan.airhockey.util.ShaderHelper;
-import ch.laessker.jonathan.airhockey.util.TextResourceReader;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
+import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
+import static android.opengl.GLES20.glClear;
+import static android.opengl.GLES20.glClearColor;
+import static android.opengl.GLES20.glViewport;
+import static android.opengl.Matrix.invertM;
+import static android.opengl.Matrix.multiplyMM;
+import static android.opengl.Matrix.multiplyMV;
+import static android.opengl.Matrix.rotateM;
+import static android.opengl.Matrix.setIdentityM;
+import static android.opengl.Matrix.setLookAtM;
+import static android.opengl.Matrix.translateM;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-import static android.opengl.GLES31.*;
 
-public class AirHockeyRenderer implements GLSurfaceView.Renderer {
+import android.content.Context;
+import android.opengl.GLSurfaceView.Renderer;
 
+import ch.laessker.jonathan.airhockey.objects.Mallet;
+import ch.laessker.jonathan.airhockey.objects.Puck;
+import ch.laessker.jonathan.airhockey.objects.Table;
+import ch.laessker.jonathan.airhockey.programs.ColorShaderProgram;
+import ch.laessker.jonathan.airhockey.programs.TextureShaderProgram;
+import ch.laessker.jonathan.airhockey.util.Geometry;
+import ch.laessker.jonathan.airhockey.util.Geometry.Plane;
+import ch.laessker.jonathan.airhockey.util.Geometry.Point;
+import ch.laessker.jonathan.airhockey.util.Geometry.Ray;
+import ch.laessker.jonathan.airhockey.util.Geometry.Sphere;
+import ch.laessker.jonathan.airhockey.util.Geometry.Vector;
+import ch.laessker.jonathan.airhockey.util.MatrixHelper;
+import ch.laessker.jonathan.airhockey.util.TextureHelper;
+
+public class AirHockeyRenderer implements Renderer {
     private final Context context;
 
-    // OpenGL Program
-    private int program;
+    private final float[] projectionMatrix = new float[16];
+    private final float[] modelMatrix = new float[16];
+    private final float[] viewMatrix = new float[16];
+    private final float[] viewProjectionMatrix = new float[16];
+    private final float[] invertedViewProjectionMatrix = new float[16];
+    private final float[] modelViewProjectionMatrix = new float[16];
 
-    // Uniform Location Data
-    private static final String U_COLOR = "u_Color";
-    private int uColorLocation;
+    private Table table;
+    private Mallet mallet;
+    private Puck puck;
 
-    // Attribute Location Data
-    private static final String A_POSITION = "a_Position";
-    private int aPositionLocation;
+    private TextureShaderProgram textureProgram;
+    private ColorShaderProgram colorProgram;
 
-    // How Many components are associated with each vertex for this attribute
-    // In this case 2: x coordinate AND y coordinate
-    private static final int POSITION_COMPONENT_COUNT = 2;
+    private int texture;
 
-    private static final int BYTES_PER_FLOAT = 4;
-    private final FloatBuffer vertexData;
+    private boolean malletPressed = false;
+    private Point blueMalletPosition;
+
+    private final float leftBound = -0.5f;
+    private final float rightBound = 0.5f;
+    private final float farBound = -0.8f;
+    private final float nearBound = 0.8f;
+
+    private Point previousBlueMalletPosition;
+
+    private Point puckPosition;
+    private Vector puckVector;
 
     public AirHockeyRenderer(Context context) {
         this.context = context;
-/*
-        // Original Table Rectangle
-        float[] tableVertices = { 0f, 0f,
-                                  0f, 14f,
-                                  9f, 14f,
-                                  9f, 0f };
-*/
-
-        // Table Rectangle Via Triangles
-        float[] tableVerticesWithTriangles = {
-                // First Triangle
-                -1.0f, -1.0f,
-                1.0f, 1.0f,
-                -1.0f, 1.0f,
-                // Second Triangle
-                -1.0f, -1.0f,
-                1.0f, -1.0f,
-                1.0f, 1.0f,
-                // Center Line
-                -1.0f, 0f,
-                1.0f, 0f,
-                // Mallet1
-                //0f, -0.5f,
-                //0f, 0.25f
-                //firstTriangle
-                -0.05f,-0.75f,
-                0.05f,-0.65f,
-                -0.05f,-0.65f,
-
-                //SecondTriangle
-                -0.05f,-0.75f,
-                0.05f,-0.75f,
-                0.05f,-0.65f,
-
-                // Mallet2
-                //firstTriangle
-                -0.05f,0.75f,
-                0.05f,0.75f,
-                0.05f,0.65f,
-                //SecondTriangle
-                -0.05f,0.75f,
-                0.05f,0.65f,
-                -0.05f,0.65f
-        };
-
-        // Creating Space In Native Memory (Not Dalvik VM Memory) for OpenGL work
-        // Note the memory will be automatically freed up when the process is destroyed
-        vertexData = ByteBuffer.allocateDirect(tableVerticesWithTriangles.length * BYTES_PER_FLOAT)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer();
-        vertexData.put(tableVerticesWithTriangles);
     }
 
-    /**
-     * Called to draw the current frame.
-     * <p/>
-     * This method is responsible for drawing the current frame.
-     * <p/>
-     * The implementation of this method typically looks like this:
-     * <pre class="prettyprint">
-     * void onDrawFrame(GL10 gl) {
-     * gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-     * //... other gl calls to render the scene ...
-     * }
-     * </pre>
-     *
-     * @param gl the GL interface. Use <code>instanceof</code> to
-     *           test if the interface supports GL11 or higher interfaces.
-     */
+    public void handleTouchPress(float normalizedX, float normalizedY) {
 
-    public void onDrawFrame(GL10 gl) {
-        // Clear the rendering surface.
-        // This will wipe out all colors on the screen and fill the screen with
-        // the color previously defined by our call to glClearColor.
-        glClear(GL_COLOR_BUFFER_BIT);
+        Ray ray = convertNormalized2DPointToRay(normalizedX, normalizedY);
 
+        // Now test if this ray intersects with the mallet by creating a
+        // bounding sphere that wraps the mallet.
+        Sphere malletBoundingSphere = new Sphere(new Point(
+                blueMalletPosition.x,
+                blueMalletPosition.y,
+                blueMalletPosition.z),
+                mallet.height / 2f);
 
-        // Draw the Air Hockey Table
-        // =========================
-
-        // Set the color to white
-        glUniform4f(uColorLocation, 0.4f, 0.4f, 0.4f, 1.0f);
-        // Set drawing mode to Triangles, start reading vertices from beginning of array, read (and draw) 6 vertices
-        // This draws First Triangle and Second Triangle because glVertexAttribPointer() told OpenGL that each vertex consists of 2 components
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-
-        // Draw the Dividing Line (aka Center Ice)
-        // =======================================
-        // Set the color to red
-        glUniform4f(uColorLocation, 1.0f, 0.0f, 0.0f, 1.0f);
-        // Draw lines, starting at 6th index of array, draw two vertices
-        glDrawArrays(GL_LINES, 6, 2);
-
-        // Draw The Mallets
-        // ================
-        // Draw first mallet as blue, from 8th index, and 1 vertex
-        glUniform4f(uColorLocation, 0.0f, 0.0f, 1.0f, 1.0f);
-        glDrawArrays(GL_TRIANGLES, 8, 6);
-
-        // Draw second mallet as red, from 9th index, and 1 vertex
-        glUniform4f(uColorLocation, 1.0f, 0.0f, 0.0f, 1.0f);
-        glDrawArrays(GL_TRIANGLES, 14, 6);
+        // If the ray intersects (if the user touched a part of the screen that
+        // intersects the mallet's bounding sphere), then set malletPressed =
+        // true.
+        malletPressed = Geometry.intersects(malletBoundingSphere, ray);
     }
 
-    /**
-     * Called when the surface is created or recreated.
-     * <p/>
-     * Called when the rendering thread
-     * starts and whenever the EGL context is lost. The EGL context will typically
-     * be lost when the Android device awakes after going to sleep.
-     * <p/>
-     * Since this method is called at the beginning of rendering, as well as
-     * every time the EGL context is lost, this method is a convenient place to put
-     * code to create resources that need to be created when the rendering
-     * starts, and that need to be recreated when the EGL context is lost.
-     * Textures are an example of a resource that you might want to create
-     * here.
-     * <p/>
-     * Note that when the EGL context is lost, all OpenGL resources associated
-     * with that context will be automatically deleted. You do not need to call
-     * the corresponding "glDelete" methods such as glDeleteTextures to
-     * manually delete these lost resources.
-     * <p/>
-     *
-     * @param gl     the GL interface. Use <code>instanceof</code> to
-     *               test if the interface supports GL11 or higher interfaces.
-     * @param config the EGLConfig of the created surface. Can be used
-     */
+    private Ray convertNormalized2DPointToRay(
+            float normalizedX, float normalizedY) {
+        // We'll convert these normalized device coordinates into world-space
+        // coordinates. We'll pick a point on the near and far planes, and draw a
+        // line between them. To do this transform, we need to first multiply by
+        // the inverse matrix, and then we need to undo the perspective divide.
+        final float[] nearPointNdc = {normalizedX, normalizedY, -1, 1};
+        final float[] farPointNdc =  {normalizedX, normalizedY,  1, 1};
+
+        final float[] nearPointWorld = new float[4];
+        final float[] farPointWorld = new float[4];
+
+        multiplyMV(
+                nearPointWorld, 0, invertedViewProjectionMatrix, 0, nearPointNdc, 0);
+        multiplyMV(
+                farPointWorld, 0, invertedViewProjectionMatrix, 0, farPointNdc, 0);
+
+        // Why are we dividing by W? We multiplied our vector by an inverse
+        // matrix, so the W value that we end up is actually the *inverse* of
+        // what the projection matrix would create. By dividing all 3 components
+        // by W, we effectively undo the hardware perspective divide.
+        divideByW(nearPointWorld);
+        divideByW(farPointWorld);
+
+        // We don't care about the W value anymore, because our points are now
+        // in world coordinates.
+        Point nearPointRay =
+                new Point(nearPointWorld[0], nearPointWorld[1], nearPointWorld[2]);
+
+        Point farPointRay =
+                new Point(farPointWorld[0], farPointWorld[1], farPointWorld[2]);
+
+        return new Ray(nearPointRay,
+                Geometry.vectorBetween(nearPointRay, farPointRay));
+    }
+
+    private void divideByW(float[] vector) {
+        vector[0] /= vector[3];
+        vector[1] /= vector[3];
+        vector[2] /= vector[3];
+    }
+
+
+    public void handleTouchDrag(float normalizedX, float normalizedY) {
+
+        if (malletPressed) {
+            Ray ray = convertNormalized2DPointToRay(normalizedX, normalizedY);
+            // Define a plane representing our air hockey table.
+            Plane plane = new Plane(new Point(0, 0, 0), new Vector(0, 1, 0));
+            // Find out where the touched point intersects the plane
+            // representing our table. We'll move the mallet along this plane.
+            Point touchedPoint = Geometry.intersectionPoint(ray, plane);
+            // Clamp to bounds                        
+
+            previousBlueMalletPosition = blueMalletPosition;            
+            /*
+            blueMalletPosition =
+                new Point(touchedPoint.x, mallet.height / 2f, touchedPoint.z);
+            */
+            // Clamp to bounds            
+            blueMalletPosition = new Point(
+                    clamp(touchedPoint.x,
+                            leftBound + mallet.radius,
+                            rightBound - mallet.radius),
+                    mallet.height / 2f,
+                    clamp(touchedPoint.z,
+                            0f + mallet.radius,
+                            nearBound - mallet.radius));
+
+            // Now test if mallet has struck the puck.
+            float distance =
+                    Geometry.vectorBetween(blueMalletPosition, puckPosition).length();
+
+            if (distance < (puck.radius + mallet.radius)) {
+                // The mallet has struck the puck. Now send the puck flying
+                // based on the mallet velocity.
+                puckVector = Geometry.vectorBetween(
+                        previousBlueMalletPosition, blueMalletPosition);
+            }
+        }
+    }
+
+    private float clamp(float value, float min, float max) {
+        return Math.min(max, Math.max(value, min));
+    }
+
     @Override
-    public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        // Clears Screen
-        // Specifically, clears screen to display Black when done
+    public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
-        // Load In OpenGL Shaders
-        String vertexShaderSource = TextResourceReader.readTextFileFromResource(context, R.raw.simple_vertex_shader);
-        String fragmentShaderSource = TextResourceReader.readTextFileFromResource(context, R.raw.simple_fragment_shader);
+        table = new Table();
+        mallet = new Mallet(0.08f, 0.15f, 32);
+        puck = new Puck(0.06f, 0.02f, 32);
 
-        // Compile the shaders
-        int vertexShader = ShaderHelper.compileVertexShader(vertexShaderSource);
-        int fragmentShader = ShaderHelper.compileFragmentShader(fragmentShaderSource);
+        blueMalletPosition = new Point(0f, mallet.height / 2f, 0.4f);
+        puckPosition = new Point(0f, puck.height / 2f, 0f);
+        puckVector = new Vector(0f, 0f, 0f);
 
-        // Get OpenGL program
-        program = ShaderHelper.linkProgram(vertexShader, fragmentShader);
+        textureProgram = new TextureShaderProgram(context);
+        colorProgram = new ColorShaderProgram(context);
 
-        // Validate OpenGL Program
-        if (LoggerConfig.ON) {
-            ShaderHelper.validateProgram(program);
-        }
-
-        // Set OpenGL program to be used for any drawing
-        glUseProgram(program);
-
-        // Get Uniform Location
-        uColorLocation = glGetUniformLocation(program, U_COLOR);
-
-        // Get Attribute Location Once Shaders have been bound
-        aPositionLocation = glGetAttribLocation(program, A_POSITION);
-
-        // Tell OpenGL where to find data for our attribute a_Position
-        // ===========================================================
-        // Ensure OpenGL starts at beginning of data buffer
-        vertexData.position(0);
-
-        // Tell OpenGL that it can find data for a_Position in vertexData
-        // glVertexAttribPointer(int index, int size, int type, boolean normalized, int stride, Buffer ptr)
-        glVertexAttribPointer(aPositionLocation, POSITION_COMPONENT_COUNT, GL_FLOAT, false, 0, vertexData);
-
-        // Enable Vertex Data Array so OpenGL can find all data
-        glEnableVertexAttribArray(aPositionLocation);
+        texture = TextureHelper.loadTexture(context, R.drawable.air_hockey_surface);
     }
 
-    /**
-     * Called when the surface changed size.
-     * <p/>
-     * Called after the surface is created and whenever
-     * the OpenGL ES surface size changes.
-     * <p/>
-     * Typically you will set your viewport here. If your camera
-     * is fixed then you could also set your projection matrix here:
-     * <pre class="prettyprint">
-     * void onSurfaceChanged(GL10 gl, int width, int height) {
-     * gl.glViewport(0, 0, width, height);
-     * // for a fixed camera, set the projection too
-     * float ratio = (float) width / height;
-     * gl.glMatrixMode(GL10.GL_PROJECTION);
-     * gl.glLoadIdentity();
-     * gl.glFrustumf(-ratio, ratio, -1, 1, 1, 10);
-     * }
-     * </pre>
-     *
-     * @param gl     the GL interface. Use <code>instanceof</code> to
-     *               test if the interface supports GL11 or higher interfaces.
-     * @param width
-     * @param height
-     */
     @Override
-    public void onSurfaceChanged(GL10 gl, int width, int height) {
-        // Set the OpenGL viewport to fill the entire surface of
-        // the regularly specified view used to display OpenGL
+    public void onSurfaceChanged(GL10 glUnused, int width, int height) {
+        // Set the OpenGL viewport to fill the entire surface.
         glViewport(0, 0, width, height);
+
+        MatrixHelper.perspectiveM(projectionMatrix, 45, (float) width
+                / (float) height, 1f, 10f);
+
+        setLookAtM(viewMatrix, 0, 0f, 1.2f, 2.2f, 0f, 0f, 0f, 0f, 1f, 0f);
+    }
+
+    @Override
+    public void onDrawFrame(GL10 glUnused) {
+        // Clear the rendering surface.
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        // Translate the puck by its vector
+        puckPosition = puckPosition.translate(puckVector);
+
+        // If the puck struck a side, reflect it off that side.
+        if (puckPosition.x < leftBound + puck.radius
+                || puckPosition.x > rightBound - puck.radius) {
+            puckVector = new Vector(-puckVector.x, puckVector.y, puckVector.z);
+            puckVector = puckVector.scale(0.9f);
+        }
+        if (puckPosition.z < farBound + puck.radius
+                || puckPosition.z > nearBound - puck.radius) {
+            puckVector = new Vector(puckVector.x, puckVector.y, -puckVector.z);
+            puckVector = puckVector.scale(0.9f);
+        }
+        // Clamp the puck position.
+        puckPosition = new Point(
+                clamp(puckPosition.x, leftBound + puck.radius, rightBound - puck.radius),
+                puckPosition.y,
+                clamp(puckPosition.z, farBound + puck.radius, nearBound - puck.radius)
+        );
+
+        // Friction factor
+        puckVector = puckVector.scale(0.99f);
+
+        // Update the viewProjection matrix, and create an inverted matrix for
+        // touch picking.
+        multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0,
+                viewMatrix, 0);
+        invertM(invertedViewProjectionMatrix, 0, viewProjectionMatrix, 0);
+
+        // Draw the table.
+        positionTableInScene();
+        textureProgram.useProgram();
+        textureProgram.setUniforms(modelViewProjectionMatrix, texture);
+        table.bindData(textureProgram);
+        table.draw();
+
+        // Draw the mallets.
+        positionObjectInScene(0f, mallet.height / 2f, -0.4f);
+        colorProgram.useProgram();
+        colorProgram.setUniforms(modelViewProjectionMatrix, 1f, 0f, 0f);
+        mallet.bindData(colorProgram);
+        mallet.draw();
+
+        positionObjectInScene(blueMalletPosition.x, blueMalletPosition.y,
+                blueMalletPosition.z);
+        colorProgram.setUniforms(modelViewProjectionMatrix, 0f, 0f, 1f);
+        // Note that we don't have to define the object data twice -- we just
+        // draw the same mallet again but in a different position and with a
+        // different color.
+        mallet.draw();
+
+        // Draw the puck.
+        positionObjectInScene(puckPosition.x, puckPosition.y, puckPosition.z);
+        colorProgram.setUniforms(modelViewProjectionMatrix, 0.8f, 0.8f, 1f);
+        puck.bindData(colorProgram);
+        puck.draw();
+    }
+
+    private void positionTableInScene() {
+        // The table is defined in terms of X & Y coordinates, so we rotate it
+        // 90 degrees to lie flat on the XZ plane.
+        setIdentityM(modelMatrix, 0);
+        rotateM(modelMatrix, 0, -90f, 1f, 0f, 0f);
+        multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix,
+                0, modelMatrix, 0);
+    }
+
+    // The mallets and the puck are positioned on the same plane as the table.
+    private void positionObjectInScene(float x, float y, float z) {
+        setIdentityM(modelMatrix, 0);
+        translateM(modelMatrix, 0, x, y, z);
+        multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix,
+                0, modelMatrix, 0);
     }
 }
-
