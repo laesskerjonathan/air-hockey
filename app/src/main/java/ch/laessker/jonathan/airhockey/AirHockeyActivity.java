@@ -1,19 +1,20 @@
 package ch.laessker.jonathan.airhockey;
 
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Toast;
-
-import android.app.Activity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.Toast;
+
+import ch.laessker.jonathan.airhockey.game.Game;
+import ch.laessker.jonathan.airhockey.game.Player;
 
 public class AirHockeyActivity extends Activity {
     /**
@@ -21,11 +22,16 @@ public class AirHockeyActivity extends Activity {
      */
     private GLSurfaceView glSurfaceView;
     private boolean rendererSet = false;
+    private Game game;
+    private Player p1;
+    private Player p2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        p1 = new Player(1, "pinco 1", 0);
+        p2 = new Player(2, "pallino 2", 0);
+        game = new Game(1, 1, p1, p2);
         glSurfaceView = new GLSurfaceView(this);
 
         // Check if the system supports OpenGL ES 2.0.
@@ -47,7 +53,7 @@ public class AirHockeyActivity extends Activity {
                         || Build.MODEL.contains("Emulator")
                         || Build.MODEL.contains("Android SDK built for x86")));
 
-        final AirHockeyRenderer airHockeyRenderer = new AirHockeyRenderer(this);
+        final AirHockeyRenderer airHockeyRenderer = new AirHockeyRenderer(this,game);
 
         if (supportsEs2) {
             // ...

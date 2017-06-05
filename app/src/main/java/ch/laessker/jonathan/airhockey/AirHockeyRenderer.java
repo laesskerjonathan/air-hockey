@@ -25,7 +25,9 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
+import android.widget.Toast;
 
+import ch.laessker.jonathan.airhockey.game.Game;
 import ch.laessker.jonathan.airhockey.objects.Mallet;
 import ch.laessker.jonathan.airhockey.objects.Puck;
 import ch.laessker.jonathan.airhockey.objects.Table;
@@ -54,6 +56,8 @@ public class AirHockeyRenderer implements Renderer {
     private Mallet malletP1;
     private Mallet malletP2;
     private Puck puck;
+    private Game game;
+
 
     private TextureShaderProgram textureProgram;
     private ColorShaderProgram colorProgram;
@@ -65,9 +69,10 @@ public class AirHockeyRenderer implements Renderer {
     private Point P1MalletPosition;
     private Point P2MalletPosition;
 
-    // goal player 1 bounds
+    // wide goal
+    private final float wideHalfGoal = 0.1f;
 
-    // goal player 2 bounds
+
 
     // left and right limits
     private final float leftBound = -0.5f;
@@ -88,8 +93,9 @@ public class AirHockeyRenderer implements Renderer {
     private Point puckPosition;
     private Vector puckVector;
 
-    public AirHockeyRenderer(Context context) {
+    public AirHockeyRenderer(Context context,Game game) {
         this.context = context;
+        this.game = game;
     }
 
     public void handleTouchPress(float normalizedX, float normalizedY) {
@@ -174,10 +180,7 @@ public class AirHockeyRenderer implements Renderer {
             // Clamp to bounds                        
 
             previousP1MalletPosition = P1MalletPosition;
-            /*
-            blueMalletPosition =
-                new Point(touchedPoint.x, mallet.height / 2f, touchedPoint.z);
-            */
+
             // Clamp to bounds            
             P1MalletPosition = new Point(
                     clamp(touchedPoint.x,
@@ -186,17 +189,18 @@ public class AirHockeyRenderer implements Renderer {
                     malletP1.height / 2f,
                     clamp(touchedPoint.z,
                             0f + malletP1.radius,
-                            nearBound - malletP1.radius));
+                            nearBound - malletP1.radius)); // bottom half of the table
 
             // Now test if mallet has struck the puck.
             float distance =
                     Geometry.vectorBetween(P1MalletPosition, puckPosition).length();
 
-            if (distance < (puck.radius + malletP1.radius)) {
+            if (distance <= (puck.radius + malletP1.radius)) {
                 // The mallet has struck the puck. Now send the puck flying
                 // based on the mallet velocity.
                 puckVector = Geometry.vectorBetween(
                         previousP1MalletPosition, P1MalletPosition);
+                puckVector = puckVector.scale(0.9f);
             }
         }
         else if(malletPressedP2)
@@ -210,10 +214,7 @@ public class AirHockeyRenderer implements Renderer {
             // Clamp to bounds
 
             previousP2MalletPosition = P2MalletPosition;
-            /*
-            blueMalletPosition =
-                new Point(touchedPoint.x, mallet.height / 2f, touchedPoint.z);
-            */
+
             // Clamp to bounds
             P2MalletPosition = new Point(
                     clamp(touchedPoint.x,
@@ -223,17 +224,18 @@ public class AirHockeyRenderer implements Renderer {
                     clamp(touchedPoint.z,
                             farBound + malletP2.radius,
                             0f - malletP2.radius
-                            ));
+                            )); // top half of the table
 
             // Now test if mallet has struck the puck.
             float distance =
                     Geometry.vectorBetween(P2MalletPosition, puckPosition).length();
 
-            if (distance < (puck.radius + malletP2.radius)) {
+            if (distance <= (puck.radius + malletP2.radius)) {
                 // The mallet has struck the puck. Now send the puck flying
                 // based on the mallet velocity.
                 puckVector = Geometry.vectorBetween(
                         previousP2MalletPosition, P2MalletPosition);
+                puckVector = puckVector.scale(0.9f);
             }
         }
 
@@ -248,15 +250,14 @@ public class AirHockeyRenderer implements Renderer {
     @Override
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-
         table = new Table();
-        malletP1 = new Mallet(0.08f, 0.15f, 32);
-        malletP2 = new Mallet(0.08f, 0.15f, 32);
-        puck = new Puck(0.06f, 0.02f, 32);
+        malletP1 = new Mallet(0.05f, 0.10f, 64);
+        malletP2 = new Mallet(0.05f, 0.10f, 64);
+        puck = new Puck(0.03f, 0.02f, 64);
 
         P1MalletPosition = new Point(0f, malletP1.height / 2f, 0.4f);
         P2MalletPosition = new Point(0f, malletP2.height / 2f, -0.4f);
-        puckPosition = new Point(0f, puck.height / 2f, 0f);
+        puckPosition = new Point(0f, puck.height / 2f, 0.25f);
         puckVector = new Vector(0f, 0f, 0f);
 
         textureProgram = new TextureShaderProgram(context);
@@ -295,18 +296,42 @@ public class AirHockeyRenderer implements Renderer {
                 || puckPosition.x > rightBound - puck.radius) {
             puckVector = new Vector(-puckVector.x, puckVector.y, puckVector.z);
             puckVector = puckVector.scale(0.9f);
+
         }
         if (puckPosition.z < farBound + puck.radius
-                || puckPosition.z > nearBound - puck.radius) {
+                ) {
+            // check if goal
+                if (puckPosition.x < wideHalfGoal && puckPosition.x > -wideHalfGoal )
+                {
+                    //this is a goal for player 1
+                    game.increaseScore(1,1);
+                    game.checkWin();
+                }
             puckVector = new Vector(puckVector.x, puckVector.y, -puckVector.z);
             puckVector = puckVector.scale(0.9f);
         }
+
+        if (puckPosition.z > nearBound - puck.radius) {
+            // check if goal
+            if (puckPosition.x < wideHalfGoal && puckPosition.x > -wideHalfGoal )
+            {
+                //this is a goal for player 2
+                game.increaseScore(2,1);
+                game.checkWin();
+            }
+            puckVector = new Vector(puckVector.x, puckVector.y, -puckVector.z);
+            puckVector = puckVector.scale(0.9f);
+        }
+
+
+
+        // TOD FIX COLLISION BUG
         /*if (distanceP2 < (puck.radius + malletP2.radius)) {
             // The mallet has struck the puck. Now send the puck flying
             // based on the mallet velocity.
             puckVector = Geometry.vectorBetween(
                     previousP2MalletPosition, P2MalletPosition);
-            puckVector = puckVector.scale(0.9f);
+
         }
 
         if (distanceP1 < (puck.radius + malletP2.radius)) {
@@ -314,7 +339,7 @@ public class AirHockeyRenderer implements Renderer {
             // based on the mallet velocity.
             puckVector = Geometry.vectorBetween(
                     previousP2MalletPosition, P2MalletPosition);
-            puckVector = puckVector.scale(0.9f);
+
         }*/
 
 

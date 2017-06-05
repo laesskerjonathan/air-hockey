@@ -1,27 +1,19 @@
 package ch.laessker.jonathan.airhockey.game;
 
+import ch.laessker.jonathan.airhockey.objects.Mallet;
 public class Player {
 
     private int score;
     private int id;
     private String name;
-    private Mallet mallet;
 
-
-    public Player(int id, String name, int initialScore, Mallet mallet) {
+    public Player(int id, String name, int initialScore) {
         setId(id);
         setName(name);
         setScore(initialScore);
-        setMallet(mallet);
     }
-
-
     public void setId(int id) {
         this.id = id;
-    }
-
-    public void setMallet(Mallet mallet) {
-        this.mallet = mallet;
     }
 
     public void setName(String name) {
@@ -42,10 +34,6 @@ public class Player {
 
     public int getScore() {
         return this.score;
-    }
-
-    public Mallet getMallet() {
-        return mallet;
     }
 
     public void incrementScore(int amount) {
