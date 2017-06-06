@@ -1,6 +1,7 @@
 package ch.laessker.jonathan.airhockey;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -23,6 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import ch.laessker.jonathan.airhockey.util.DBHelper;
+import ch.laessker.jonathan.airhockey.util.SettingsValues;
+
 public class SettingsMenu extends AppCompatActivity {
 
     /**
@@ -30,46 +34,23 @@ public class SettingsMenu extends AppCompatActivity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    private DBHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_menu);
 
+        Context applicationContext = getApplicationContext();
 
-        final AirHockeyDatenbank AHDB = AirHockeyDatenbank.getInstance(getApplicationContext());
-        final SQLiteDatabase db = AHDB.getWritableDatabase();
+        helper = new DBHelper(applicationContext);
 
-        String[] projection = {
-                "effects",
-                "soundtrack",
-                "difficulty"
-        };
-        String selection = "id" + " = ?";
-        String[] selectionArgs = { "1" };
-        String sortOrder =
-                "effects" + " DESC";
+        SettingsValues settingsValues = helper.returnSavedValues();
 
-        Cursor cursor = db.query(
-                "settings",                     // The table to query
-                projection,                               // The columns to return
-                selection,                                // The columns for the WHERE clause
-                selectionArgs,                            // The values for the WHERE clause
-                null,                                     // don't group the rows
-                null,                                     // don't filter by row groups
-                sortOrder                                 // The sort order
-        );
+        int effects = settingsValues.getEffects();
+        int soundtrack = settingsValues.getSoundtrack();
+        int difficulty = settingsValues.getDifficulty();
 
-        int effects = 10;
-        int soundtrack = 10;
-        int difficulty = 10;
-
-        while(cursor.moveToNext()) {
-             effects = cursor.getInt(0);
-             soundtrack = cursor.getInt(1);
-             difficulty = cursor.getInt(2);
-        }
-        cursor.close();
         Toast.makeText(SettingsMenu.this, "Settings Loaded: effects: " + effects + ", soundtrack: " + soundtrack + ", difficulty: " + difficulty, Toast.LENGTH_LONG).show();
 
         Button saveSettingsButton = (Button) findViewById(R.id.button);
@@ -92,15 +73,7 @@ public class SettingsMenu extends AppCompatActivity {
                 int soundtrack = (soundtrackSwitch.isChecked() ? 1 : 0);
                 int difficulty = difficultySpinner.getSelectedItemPosition();
 
-                ContentValues values = new ContentValues();
-                values.put("effects", effects);
-                values.put("soundtrack", soundtrack);
-                values.put("difficulty", difficulty);
-
-                String selection = "id" + " = ?";
-                String[] selectionArgs = { "1" };
-
-                long newRowId = db.update("settings", values, selection, selectionArgs);
+                helper.setValues(effects, soundtrack, difficulty);
 
                 Toast.makeText(SettingsMenu.this, "Settings Saved: effects: " + effects + ", soundtrack: " + soundtrack + ", difficulty: " + difficulty, Toast.LENGTH_LONG).show();
                 final Intent i = new Intent(SettingsMenu.this, HauptMenu.class);
