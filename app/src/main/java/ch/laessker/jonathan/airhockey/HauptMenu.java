@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.view.View;
+import ch.laessker.jonathan.airhockey.data.BackgroundMusicService;
 
 public class HauptMenu extends AppCompatActivity {
 
@@ -16,6 +17,8 @@ public class HauptMenu extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent serviceIntent = new Intent(this,BackgroundMusicService.class);
+        startService(serviceIntent);
         setContentView(R.layout.activity_haupt_menu);
 
         singlePlayerButton = (Button) findViewById(R.id.single_player_pre_game);

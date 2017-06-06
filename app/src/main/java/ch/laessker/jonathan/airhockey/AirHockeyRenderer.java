@@ -275,7 +275,8 @@ public class AirHockeyRenderer implements Renderer {
                 / (float) height, 1f, 10f);
 
         //setLookAtM(viewMatrix, 0, 0f, 1.2f, 2.2f, 0f, 0f, 0f, 0f, 1f, 0f);
-        setLookAtM(viewMatrix, 0, 0f, 2.2f, 0.01f, 0f, 0f, 0f, 0f, 1f, 0f);
+        setLookAtM(viewMatrix, 0, 0f, 2.2f, 0.01f, 0f, 0f, 0f, 0f, 1f, 0f); //working camera orientation
+        //setLookAtM(viewMatrix, 0, 2f, 2.2f, 2f, 0f, 0f, 0f, 0f, 1f, 0f);
     }
 
     @Override
@@ -325,7 +326,7 @@ public class AirHockeyRenderer implements Renderer {
 
 
 
-        // TOD FIX COLLISION BUG
+        // TODO FIX COLLISION BUG
         /*if (distanceP2 < (puck.radius + malletP2.radius)) {
             // The mallet has struck the puck. Now send the puck flying
             // based on the mallet velocity.
