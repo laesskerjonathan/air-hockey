@@ -20,6 +20,7 @@ import android.util.FloatMath;
 import ch.laessker.jonathan.airhockey.util.Geometry.Circle;
 import ch.laessker.jonathan.airhockey.util.Geometry.Cylinder;
 import ch.laessker.jonathan.airhockey.util.Geometry.Point;
+import ch.laessker.jonathan.airhockey.util.Geometry.Rectangle;
 
 class ObjectBuilder {
     private static final int FLOATS_PER_VERTEX = 3;

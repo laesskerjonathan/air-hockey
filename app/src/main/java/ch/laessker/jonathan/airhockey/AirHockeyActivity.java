@@ -106,6 +106,14 @@ public class AirHockeyActivity extends Activity {
                                 }
                             });
 
+                        case MotionEvent.ACTION_POINTER_DOWN:
+                            glSurfaceView.queueEvent(new Runnable() {
+                                @Override
+                                public void run() {
+                                    airHockeyRenderer.handleTouchPress(
+                                            normalizedX, normalizedY);
+                                }
+                            });
                         case MotionEvent.ACTION_MOVE: {
                             glSurfaceView.queueEvent(new Runnable() {
                                 @Override

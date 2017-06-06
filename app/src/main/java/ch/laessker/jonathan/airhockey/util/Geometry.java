@@ -93,7 +93,17 @@ public class Geometry {
             return new Circle(center, radius * scale);
         }
     }
-    
+    public static class Rectangle{
+        public final Point center;
+        public final float length;
+        public final float width;
+        public Rectangle(Point center, float length, float width){
+            this.center = center;
+            this.length = length;
+            this.width = width;
+        }
+    }
+
     public static class Cylinder {
         public final Point center;
         public final float radius;
