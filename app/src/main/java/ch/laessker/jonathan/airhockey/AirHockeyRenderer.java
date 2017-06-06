@@ -203,7 +203,7 @@ public class AirHockeyRenderer implements Renderer {
                 puckVector = puckVector.scale(0.9f);
             }
         }
-        else if(malletPressedP2)
+        if(malletPressedP2)
         {
             Ray ray = convertNormalized2DPointToRay(normalizedX, normalizedY);
             // Define a plane representing our air hockey table.
