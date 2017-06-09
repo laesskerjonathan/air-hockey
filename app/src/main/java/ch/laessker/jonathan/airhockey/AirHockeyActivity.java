@@ -32,7 +32,9 @@ public class AirHockeyActivity extends Activity {
         p1 = new Player(1, "pinco 1", 0);
         p2 = new Player(2, "pallino 2", 0);
         game = new Game(1, 1, p1, p2);
-        glSurfaceView = new GLSurfaceView(this);
+
+        setContentView(R.layout.surface_view_layout);
+        glSurfaceView = (GLSurfaceView)findViewById(R.id.surfaceviewclass);
 
         // Check if the system supports OpenGL ES 2.0.
         ActivityManager activityManager =
@@ -132,7 +134,7 @@ public class AirHockeyActivity extends Activity {
             }
         });
 
-        setContentView(glSurfaceView);
+        //setContentView(glSurfaceView);
     }
 
     @Override
