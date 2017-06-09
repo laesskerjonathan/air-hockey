@@ -4,6 +4,7 @@ package ch.laessker.jonathan.airhockey;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.Button;
 import android.widget.Toast;
 
 import ch.laessker.jonathan.airhockey.game.Game;
@@ -26,6 +28,9 @@ public class AirHockeyActivity extends Activity {
     private Player p1;
     private Player p2;
 
+    private Button pauseButtonTop;
+    private Button pauseButtonBottom;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +40,24 @@ public class AirHockeyActivity extends Activity {
 
         setContentView(R.layout.surface_view_layout);
         glSurfaceView = (GLSurfaceView)findViewById(R.id.surfaceviewclass);
+
+
+        pauseButtonTop = (Button) findViewById(R.id.pauseButtonTop);
+        pauseButtonTop.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                final Intent i = new Intent(AirHockeyActivity.this,PauseMenu.class);
+                startActivityForResult(i, 0);
+            }
+        });
+
+        pauseButtonBottom = (Button) findViewById(R.id.pauseButtonBottom);
+        pauseButtonBottom.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                final Intent i = new Intent(AirHockeyActivity.this,PauseMenu.class);
+                startActivityForResult(i, 0);
+            }
+        });
+
 
         // Check if the system supports OpenGL ES 2.0.
         ActivityManager activityManager =
@@ -154,4 +177,16 @@ public class AirHockeyActivity extends Activity {
             glSurfaceView.onResume();
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                setResult(RESULT_OK, null);
+                this.finish();
+            }
+        }
+    }
+
 }

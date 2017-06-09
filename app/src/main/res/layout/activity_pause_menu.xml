@@ -26,14 +26,23 @@
         android:layout_below="@+id/textView6"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="28dp"
-        android:id="@+id/button4" />
+        android:id="@+id/continueGame" />
 
     <Button
         android:text="@string/save_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button4"
-        android:layout_alignEnd="@+id/button4"
-        android:layout_marginTop="42dp"
-        android:id="@+id/button9" />
+        android:layout_marginTop="39dp"
+        android:id="@+id/saveGame"
+        android:layout_below="@+id/continueGame"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/mainMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/saveGame"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="53dp"
+        android:text="Main Menu" />
 </RelativeLayout>

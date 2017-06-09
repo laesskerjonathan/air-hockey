@@ -10,13 +10,14 @@
     <Button
         android:id="@+id/pauseButtonBottom"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Pause" />
+        android:layout_height="35dp"
+        android:text="Pause"
+        android:textAlignment="viewStart" />
 
     <Button
         android:id="@+id/pauseButtonTop"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:text="Pause"
         android:layout_gravity="bottom" />
 

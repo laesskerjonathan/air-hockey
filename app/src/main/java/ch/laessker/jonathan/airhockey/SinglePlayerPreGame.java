@@ -22,7 +22,8 @@ public class SinglePlayerPreGame extends AppCompatActivity {
         newGameButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final Intent i = new Intent(SinglePlayerPreGame.this,AirHockeyActivity.class);
-                startActivity(i);
+                startActivityForResult(i, 0);
+
             }
         });
         loadGameButton.setOnClickListener(new View.OnClickListener() {
@@ -30,5 +31,16 @@ public class SinglePlayerPreGame extends AppCompatActivity {
                //TODO load and start loaded game
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                this.finish();
+
+            }
+        }
     }
 }
