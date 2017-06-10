@@ -14,10 +14,12 @@ public class HauptMenu extends AppCompatActivity {
     Button statisticButton;
     Button settingsButton;
 
+    Intent serviceIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent serviceIntent = new Intent(this,BackgroundMusicService.class);
+        serviceIntent = new Intent(this,BackgroundMusicService.class);
         startService(serviceIntent);
         setContentView(R.layout.activity_haupt_menu);
 
@@ -55,6 +57,12 @@ public class HauptMenu extends AppCompatActivity {
             }
         });
         //TODO: Load Settings from Database and start the FUN (Music & Effects)
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(serviceIntent);
     }
 
 }

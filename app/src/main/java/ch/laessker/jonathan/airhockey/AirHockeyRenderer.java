@@ -34,6 +34,7 @@ import ch.laessker.jonathan.airhockey.objects.Puck;
 import ch.laessker.jonathan.airhockey.objects.Table;
 import ch.laessker.jonathan.airhockey.programs.ColorShaderProgram;
 import ch.laessker.jonathan.airhockey.programs.TextureShaderProgram;
+import ch.laessker.jonathan.airhockey.util.DBHelper;
 import ch.laessker.jonathan.airhockey.util.Geometry;
 import ch.laessker.jonathan.airhockey.util.Geometry.Plane;
 import ch.laessker.jonathan.airhockey.util.Geometry.Point;
@@ -41,6 +42,7 @@ import ch.laessker.jonathan.airhockey.util.Geometry.Ray;
 import ch.laessker.jonathan.airhockey.util.Geometry.Sphere;
 import ch.laessker.jonathan.airhockey.util.Geometry.Vector;
 import ch.laessker.jonathan.airhockey.util.MatrixHelper;
+import ch.laessker.jonathan.airhockey.util.SettingsValues;
 import ch.laessker.jonathan.airhockey.util.TextureHelper;
 
 public class AirHockeyRenderer implements Renderer {
@@ -59,7 +61,6 @@ public class AirHockeyRenderer implements Renderer {
     private Mallet malletP2;
     private Puck puck;
     private Game game;
-
 
     private TextureShaderProgram textureProgram;
     private ColorShaderProgram colorProgram;

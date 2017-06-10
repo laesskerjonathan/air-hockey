@@ -18,6 +18,7 @@ import android.widget.Toast;
 import ch.laessker.jonathan.airhockey.game.Game;
 import ch.laessker.jonathan.airhockey.game.Player;
 import ch.laessker.jonathan.airhockey.util.DBHelper;
+import ch.laessker.jonathan.airhockey.util.SettingsValues;
 
 public class AirHockeyActivity extends Activity {
     /**
@@ -42,12 +43,17 @@ public class AirHockeyActivity extends Activity {
             p1 = new Player(1, "pinco 1", 0);
             p2 = new Player(2, "pallino 2", 0);
             game = Game.getInstance();
-            game.setValues(1, 1, p1, p2);
-            Toast.makeText(AirHockeyActivity.this, "Game started", Toast.LENGTH_SHORT).show();
+            DBHelper helper = new DBHelper(getApplicationContext());
+            SettingsValues values = helper.returnSavedValues();
+            int difficulty = values.getDifficulty();
+            game.setValues(1, difficulty, p1, p2);
+            Toast.makeText(AirHockeyActivity.this, "Game started" +
+                    "\nDifficulty: " + difficulty, Toast.LENGTH_SHORT).show();
         } else {
             game= Game.getInstance();
             DBHelper helper = new DBHelper(getApplicationContext());
             helper.getGame();
+
             Toast.makeText(AirHockeyActivity.this, "Game loaded", Toast.LENGTH_SHORT).show();
         }
 
