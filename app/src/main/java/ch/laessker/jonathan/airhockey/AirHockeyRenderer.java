@@ -349,15 +349,13 @@ public class AirHockeyRenderer implements Renderer {
         if (distanceP2 < (puck.radius + malletP2.radius)) {
             // The mallet has struck the puck. Now send the puck flying
             // based on the mallet velocity.
-            puckVector = new Vector(-puckVector.x, -puckVector.y, puckVector.z);
-
+            puckVector = new Vector(-puckVector.x, -puckVector.y, -puckVector.z);
         }
 
         if (distanceP1 < (puck.radius + malletP2.radius)) {
             // The mallet has struck the puck. Now send the puck flying
             // based on the mallet velocity.
-            puckVector = new Vector(-puckVector.x, -puckVector.y, puckVector.z);
-
+            puckVector = new Vector(-puckVector.x, -puckVector.y, -puckVector.z);
         }
 
 
