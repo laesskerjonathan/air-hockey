@@ -346,21 +346,19 @@ public class AirHockeyRenderer implements Renderer {
 
 
         // TODO FIX COLLISION BUG
-        /*if (distanceP2 < (puck.radius + malletP2.radius)) {
+        if (distanceP2 < (puck.radius + malletP2.radius)) {
             // The mallet has struck the puck. Now send the puck flying
             // based on the mallet velocity.
-            puckVector = Geometry.vectorBetween(
-                    previousP2MalletPosition, P2MalletPosition);
+            puckVector = new Vector(-puckVector.x, -puckVector.y, puckVector.z);
 
         }
 
         if (distanceP1 < (puck.radius + malletP2.radius)) {
             // The mallet has struck the puck. Now send the puck flying
             // based on the mallet velocity.
-            puckVector = Geometry.vectorBetween(
-                    previousP2MalletPosition, P2MalletPosition);
+            puckVector = new Vector(-puckVector.x, -puckVector.y, puckVector.z);
 
-        }*/
+        }
 
 
 
