@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import ch.laessker.jonathan.airhockey.game.Game;
 import ch.laessker.jonathan.airhockey.game.Player;
+import ch.laessker.jonathan.airhockey.util.DBHelper;
 
 public class AirHockeyActivity extends Activity {
     /**
@@ -34,9 +35,21 @@ public class AirHockeyActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        p1 = new Player(1, "pinco 1", 0);
-        p2 = new Player(2, "pallino 2", 0);
-        game = new Game(1, 1, p1, p2);
+        Boolean startNew = getIntent().getExtras().getBoolean("startNew");
+
+
+        if(startNew) {
+            p1 = new Player(1, "pinco 1", 0);
+            p2 = new Player(2, "pallino 2", 0);
+            game = Game.getInstance();
+            game.setValues(1, 1, p1, p2);
+            Toast.makeText(AirHockeyActivity.this, "Game started", Toast.LENGTH_SHORT).show();
+        } else {
+            game= Game.getInstance();
+            DBHelper helper = new DBHelper(getApplicationContext());
+            helper.getGame();
+            Toast.makeText(AirHockeyActivity.this, "Game loaded", Toast.LENGTH_SHORT).show();
+        }
 
         setContentView(R.layout.surface_view_layout);
         glSurfaceView = (GLSurfaceView)findViewById(R.id.surfaceviewclass);
@@ -45,7 +58,8 @@ public class AirHockeyActivity extends Activity {
         pauseButtonTop = (Button) findViewById(R.id.pauseButtonTop);
         pauseButtonTop.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                final Intent i = new Intent(AirHockeyActivity.this,PauseMenu.class);
+                Intent i = new Intent(AirHockeyActivity.this,PauseMenu.class);
+                //i.putExtra("GameClass", game);
                 startActivityForResult(i, 0);
             }
         });
@@ -53,7 +67,8 @@ public class AirHockeyActivity extends Activity {
         pauseButtonBottom = (Button) findViewById(R.id.pauseButtonBottom);
         pauseButtonBottom.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                final Intent i = new Intent(AirHockeyActivity.this,PauseMenu.class);
+                Intent i = new Intent(AirHockeyActivity.this,PauseMenu.class);
+                //i.putExtra("GameClass", game);
                 startActivityForResult(i, 0);
             }
         });
@@ -78,7 +93,7 @@ public class AirHockeyActivity extends Activity {
                         || Build.MODEL.contains("Emulator")
                         || Build.MODEL.contains("Android SDK built for x86")));
 
-        final AirHockeyRenderer airHockeyRenderer = new AirHockeyRenderer(this,game);
+        final AirHockeyRenderer airHockeyRenderer = new AirHockeyRenderer(AirHockeyActivity.this,game);
 
         if (supportsEs2) {
             // ...

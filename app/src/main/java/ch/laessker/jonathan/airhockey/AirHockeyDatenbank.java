@@ -43,6 +43,18 @@ public class AirHockeyDatenbank extends SQLiteOpenHelper {
         //Default Settings eintragen
         db.execSQL("INSERT INTO settings " +
                 "VALUES (1, 1, 1, 1);");
+        //Game Tabelle erstellen
+        db.execSQL("CREATE TABLE game(" +
+                "id INTEGER PRIMARY KEY, " +
+                "difficulty INTEGER," +
+                "duration INTEGER," +
+                "pointsPlayer1 INTEGER," +
+                "pointsPlayer2 INTEGER," +
+                "namePlayer1 STRING," +
+                "namePlayer2 STRING);");
+        //Default Settings eintragen
+        db.execSQL("INSERT INTO game " +
+                "VALUES (1, 1, 0, 0, 0, 'unnamed', 'unnamed');");
         //saveGame Tabelle erstellen
         db.execSQL("CREATE TABLE saveGame(" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -61,6 +73,8 @@ public class AirHockeyDatenbank extends SQLiteOpenHelper {
                           int newVersion) {
         db.execSQL("DROP TABLE settings;");
         db.execSQL("DROP TABLE saveGame;");
+        db.execSQL("DROP TABLE game;");
+        db.execSQL("DROP TABLE highscore;");
         onCreate(db);
     }
 

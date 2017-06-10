@@ -23,6 +23,7 @@ import static android.opengl.Matrix.translateM;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.app.Activity;
 import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
 import android.widget.Toast;
@@ -44,6 +45,7 @@ import ch.laessker.jonathan.airhockey.util.TextureHelper;
 
 public class AirHockeyRenderer implements Renderer {
     private final Context context;
+    private final Activity activity;
 
     private final float[] projectionMatrix = new float[16];
     private final float[] modelMatrix = new float[16];
@@ -93,8 +95,9 @@ public class AirHockeyRenderer implements Renderer {
     private Point puckPosition;
     private Vector puckVector;
 
-    public AirHockeyRenderer(Context context,Game game) {
-        this.context = context;
+    public AirHockeyRenderer(Activity activity,Game game) {
+        this.context = activity.getApplicationContext();
+        this.activity = activity;
         this.game = game;
     }
 
@@ -264,6 +267,7 @@ public class AirHockeyRenderer implements Renderer {
         colorProgram = new ColorShaderProgram(context);
 
         texture = TextureHelper.loadTexture(context, R.drawable.air_hockey_surface_v2);
+
     }
 
     @Override
@@ -306,6 +310,14 @@ public class AirHockeyRenderer implements Renderer {
                 {
                     //this is a goal for player 1
                     game.increaseScore(1,1);
+
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(context, "Player 1: " + game.getScore(1) +
+                                    "\nPlayer 2: " + game.getScore(2), Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     game.checkWin();
                 }
             puckVector = new Vector(puckVector.x, puckVector.y, -puckVector.z);
@@ -317,7 +329,14 @@ public class AirHockeyRenderer implements Renderer {
             if (puckPosition.x < wideHalfGoal && puckPosition.x > -wideHalfGoal )
             {
                 //this is a goal for player 2
-                game.increaseScore(2,1);
+                game.increaseScore(2, 1);
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(context, "Player 1: " + game.getScore(1) +
+                                "\nPlayer 2: " + game.getScore(2), Toast.LENGTH_SHORT).show();
+                    }
+                });
                 game.checkWin();
             }
             puckVector = new Vector(puckVector.x, puckVector.y, -puckVector.z);

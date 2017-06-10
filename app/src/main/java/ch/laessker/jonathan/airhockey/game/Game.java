@@ -1,30 +1,46 @@
 package ch.laessker.jonathan.airhockey.game;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
+import java.io.Serializable;
+
+import ch.laessker.jonathan.airhockey.AirHockeyActivity;
 import ch.laessker.jonathan.airhockey.HauptMenu;
+import ch.laessker.jonathan.airhockey.SettingsMenu;
 import ch.laessker.jonathan.airhockey.SinglePlayerPreGame;
 import ch.laessker.jonathan.airhockey.objects.Puck;
 
 public class Game {
+    private static Game instance = null;
     private final int MAXPOINTS = 10;
     private int id;
     private int duration;
     private int difficulty;
+
     private Player player1;
     private Player player2;
 
 
-    public Game(int id, int difficulty, Player player1, Player player2) {
+    protected Game() {
+    }
+
+    public static Game getInstance() {
+        if(instance == null) {
+            instance = new Game();
+        }
+        return instance;
+    }
+
+    public void setValues(int id, int difficulty, Player player1, Player player2) {
         this.id = id;
         this.difficulty = difficulty;
         this.player1 = player1;
         this.player2 = player2;
-
-
     }
-
 
     public void setId(int id) {
         this.id = id;
@@ -80,6 +96,7 @@ public class Game {
         else
         if (playerNo == 2)
             this.player2.incrementScore(score);
+
     }
 
 
