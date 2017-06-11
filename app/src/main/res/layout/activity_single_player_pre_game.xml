@@ -26,6 +26,7 @@
         android:layout_below="@+id/textView5"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="22dp"
+        android:background="@drawable/oval"
         android:id="@+id/new_game" />
 
     <Button
@@ -35,5 +36,6 @@
         android:layout_below="@+id/new_game"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="38dp"
+        android:background="@drawable/oval"
         android:id="@+id/load_game" />
 </RelativeLayout>

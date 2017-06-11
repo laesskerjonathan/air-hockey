@@ -22,13 +22,15 @@
         android:id="@+id/textView2" />
 
     <Button
-        android:text="@string/single_player"
+        android:id="@+id/single_player_pre_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="27dp"
-        android:id="@+id/single_player_pre_game"
         android:layout_below="@+id/textView2"
-        android:layout_alignStart="@+id/textView2" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/oval"
+        android:elevation="6dp"
+        android:text="@string/single_player" />
 
     <Button
         android:id="@+id/settingsb"
@@ -37,6 +39,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="37dp"
         android:text="@string/settings"
+        android:background="@drawable/oval"
         android:layout_alignEnd="@+id/statisticb"
         android:layout_alignStart="@+id/statisticb" />
 
@@ -45,11 +48,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/statisticb"
+        android:background="@drawable/oval"
         android:layout_centerVertical="true"
-        android:layout_alignStart="@+id/highscoreb"
-        android:layout_alignEnd="@+id/highscoreb" />
+        android:layout_alignStart="@+id/single_player_pre_game" />
 
-    <Button
+<!--    <Button
         android:text="@string/highscore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -58,7 +61,7 @@
         android:layout_below="@+id/single_player_pre_game"
         android:layout_alignEnd="@+id/single_player_pre_game"
         android:layout_alignStart="@+id/single_player_pre_game" />
-    android:visibility="visible"
-        android:background="@drawable/btn_start_menu" />
+        android:visibility="visible"
+        android:background="@drawable/btn_start_menu" />-->
 
 </RelativeLayout>

@@ -26,6 +26,7 @@
         android:layout_below="@+id/textView6"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="28dp"
+        android:background="@drawable/oval"
         android:id="@+id/continueGame" />
 
     <Button
@@ -34,6 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="39dp"
         android:id="@+id/saveGame"
+        android:background="@drawable/oval"
         android:layout_below="@+id/continueGame"
         android:layout_centerHorizontal="true" />
 
