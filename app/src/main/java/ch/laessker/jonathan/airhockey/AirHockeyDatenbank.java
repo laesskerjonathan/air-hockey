@@ -58,7 +58,7 @@ public class AirHockeyDatenbank extends SQLiteOpenHelper {
         //saveGame Tabelle erstellen
         db.execSQL("CREATE TABLE saveGame(" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "name TEXT " +
+                "name TEXT, " +
                 "playerPoints INTEGER, " +
                 "enemyPoints INTEGER, " +
                 "playTime INTEGER); ");
@@ -67,6 +67,11 @@ public class AirHockeyDatenbank extends SQLiteOpenHelper {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "name TEXT " +
                 "playerPoints INTEGER); ");
+        db.execSQL("CREATE TABLE finishedGames(" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "player1 INTEGER, " +
+                "player2 INTEGER, " +
+                "duration INTEGER); ");
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion,
@@ -75,6 +80,7 @@ public class AirHockeyDatenbank extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE saveGame;");
         db.execSQL("DROP TABLE game;");
         db.execSQL("DROP TABLE highscore;");
+        db.execSQL("DROP TABLE finishedGames;");
         onCreate(db);
     }
 

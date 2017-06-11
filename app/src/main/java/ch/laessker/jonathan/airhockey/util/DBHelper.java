@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import ch.laessker.jonathan.airhockey.AirHockeyDatenbank;
+import ch.laessker.jonathan.airhockey.Statistics;
 import ch.laessker.jonathan.airhockey.game.Game;
 import ch.laessker.jonathan.airhockey.game.Player;
 
@@ -125,6 +126,47 @@ public class DBHelper {
         loadedGame = Game.getInstance();
         loadedGame.setValues(cursor.getInt(0), cursor.getInt(1), player1, player2);
         cursor.close();
+
+    }
+
+
+
+    public void addFinishedGame() {
+        Game currentGame = Game.getInstance();
+        ContentValues values = new ContentValues();
+        values.put("player1", currentGame.getPlayer1().getScore());
+        values.put("player2", currentGame.getPlayer2().getScore());
+        values.put("duration", currentGame.getDuration());
+
+        long newRowId = db.insert("finishedGames", null, values);
+    }
+
+    public StatisticsValues getStatistics(){
+
+        String[] projection = {
+                "sum(player1) AS player1",
+                "sum(player2) AS player2",
+                "sum(duration) AS duration"
+        };
+
+        Cursor cursor = db.query(
+                "finishedGames",                     // The table to query
+                projection,                               // The columns to return
+                null,                                // The columns for the WHERE clause
+                null,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                null                                 // The sort order
+        );
+        cursor.moveToNext();
+        int player1 = cursor.getInt(0);
+        int player2 = cursor.getInt(1);
+        int duration = cursor.getInt(2);
+
+        StatisticsValues values = new StatisticsValues(player1, player2, duration);
+
+        cursor.close();
+        return values;
 
     }
 }

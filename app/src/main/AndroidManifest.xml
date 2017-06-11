@@ -19,18 +19,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:enabled="true" android:name=".data.BackgroundMusicService" />
+
+        <service
+            android:name=".data.BackgroundMusicService"
+            android:enabled="true" />
+
         <activity android:name=".SettingsMenu" />
         <activity android:name=".Statistics" />
         <activity android:name=".SinglePlayerPreGame" />
         <activity android:name=".PauseMenu" />
-        <activity android:name=".HighScore"/>
-        <activity android:name=".PlayerWinActivity"/>
-        <activity android:name=".AirHockeyActivity"/><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <activity android:name=".HighScore" />
+        <activity android:name=".PlayerWinActivity" />
+        <activity android:name=".AirHockeyActivity" />
+        <!--
+ ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
+        -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <activity android:name=".GameFinished"></activity>
     </application>
 
 </manifest>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ch.laessker.jonathan.airhockey.GameFinished">
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Finished"
+        tools:layout_editor_absoluteX="162dp"
+        tools:layout_editor_absoluteY="71dp"
+        android:layout_above="@+id/playerWon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="58dp" />
+
+    <TextView
+        android:id="@+id/playerWon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Player X"
+        tools:layout_editor_absoluteX="148dp"
+        tools:layout_editor_absoluteY="199dp"
+        android:layout_marginBottom="37dp"
+        android:layout_above="@+id/textView10"
+        android:layout_alignStart="@+id/textView8" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="has won the game!"
+        tools:layout_editor_absoluteX="134dp"
+        tools:layout_editor_absoluteY="255dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/mainMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView10"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="83dp"
+        android:text="Return to Main Menu!" />
+
+    <TextView
+        android:id="@+id/score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView10"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="33dp"
+        android:text="10 : 0" />
+</RelativeLayout>

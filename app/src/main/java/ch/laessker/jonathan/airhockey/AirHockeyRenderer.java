@@ -358,7 +358,7 @@ public class AirHockeyRenderer implements Renderer {
                                     "\nPlayer 2: " + game.getScore(2), Toast.LENGTH_SHORT).show();
                         }
                     });
-                    game.checkWin();
+                    game.checkWin(activity);
                 }
             puckVector = new Vector(puckVector.x, puckVector.y, -puckVector.z);
             puckVector = puckVector.scale(0.9f);
@@ -377,7 +377,7 @@ public class AirHockeyRenderer implements Renderer {
                                 "\nPlayer 2: " + game.getScore(2), Toast.LENGTH_SHORT).show();
                     }
                 });
-                game.checkWin();
+                game.checkWin(activity);
             }
             puckVector = new Vector(puckVector.x, puckVector.y, -puckVector.z);
             puckVector = puckVector.scale(0.9f);

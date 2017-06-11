@@ -9,14 +9,16 @@ import android.widget.Toast;
 import java.io.Serializable;
 
 import ch.laessker.jonathan.airhockey.AirHockeyActivity;
+import ch.laessker.jonathan.airhockey.GameFinished;
 import ch.laessker.jonathan.airhockey.HauptMenu;
 import ch.laessker.jonathan.airhockey.SettingsMenu;
 import ch.laessker.jonathan.airhockey.SinglePlayerPreGame;
 import ch.laessker.jonathan.airhockey.objects.Puck;
+import ch.laessker.jonathan.airhockey.util.DBHelper;
 
 public class Game {
     private static Game instance = null;
-    private final int MAXPOINTS = 10;
+    private final int MAXPOINTS = 2;
     private int id;
     private int duration;
     private int difficulty;
@@ -106,23 +108,27 @@ public class Game {
       //  panel.ball.resetBall();
 
     }
-    public void checkWin() {
-        if (player1.getScore() > this.MAXPOINTS)
+    public void checkWin(Activity activity) {
+        if (player1.getScore() >= this.MAXPOINTS || player2.getScore() >= this.MAXPOINTS)
         {
-            // player 1 win
 
+            DBHelper helper = new DBHelper(activity.getApplicationContext());
+            helper.addFinishedGame();
+            final Intent i = new Intent(activity.getApplicationContext(),GameFinished.class);
+            activity.startActivityForResult(i, 0);
 
-        }
-        else if(player2.getScore() > this.MAXPOINTS)
-        {
-            //player 2 wins
         }
         else
         {
+            // TODO
             // continue playing
             // reset puk position in the field where the goal was scored
         }
 
+    }
+
+    public boolean player1Won(){
+        return player1.getScore() > player2.getScore();
     }
 
 
