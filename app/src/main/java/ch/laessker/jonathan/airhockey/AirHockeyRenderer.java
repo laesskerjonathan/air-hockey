@@ -63,6 +63,9 @@ public class AirHockeyRenderer implements Renderer {
     private Puck puck;
     private Game game;
 
+    private int difficulty;
+    private double difficultyFactor;
+
     private TextureShaderProgram textureProgram;
     private ColorShaderProgram colorProgram;
 
@@ -311,6 +314,7 @@ public class AirHockeyRenderer implements Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
+
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         table = new Table();
         malletP1 = new Mallet(0.05f, 0.10f, 64);
@@ -321,6 +325,8 @@ public class AirHockeyRenderer implements Renderer {
         P2MalletPosition = new Point(0f, malletP2.height / 2f, -0.4f);
         puckPosition = new Point(0f, puck.height / 2f, 0.25f);
         puckVector = new Vector(0f, 0f, 0f);
+        difficulty = game.getDifficulty();
+        this.setDifficultyFactor();
 
         textureProgram = new TextureShaderProgram(context);
         colorProgram = new ColorShaderProgram(context);
@@ -360,6 +366,7 @@ public class AirHockeyRenderer implements Renderer {
                 || puckPosition.x > rightBound - puck.radius) {
             puckVector = new Vector(-puckVector.x, puckVector.y, puckVector.z);
             puckVector = puckVector.scale(0.9f);
+           // puckVector = puckVector.scale(this.getDifficultyFactor());
 
         }
         if (puckPosition.z < farBound + puck.radius
@@ -381,6 +388,7 @@ public class AirHockeyRenderer implements Renderer {
                 }
             puckVector = new Vector(puckVector.x, puckVector.y, -puckVector.z);
             puckVector = puckVector.scale(0.9f);
+            //puckVector = puckVector.scale(this.getDifficultyFactor());
         }
 
         if (puckPosition.z > nearBound - puck.radius) {
@@ -400,6 +408,7 @@ public class AirHockeyRenderer implements Renderer {
             }
             puckVector = new Vector(puckVector.x, puckVector.y, -puckVector.z);
             puckVector = puckVector.scale(0.9f);
+           // puckVector = puckVector.scale(this.getDifficultyFactor());
         }
 
 
@@ -409,12 +418,14 @@ public class AirHockeyRenderer implements Renderer {
             // The mallet has struck the puck. Now send the puck flying
             // based on the mallet velocity.
             puckVector = new Vector(-puckVector.x, -puckVector.y, -puckVector.z);
+          //  puckVector = puckVector.scale(this.getDifficultyFactor());
         }
 
         if (distanceP1 <= (puck.radius + malletP2.radius)) {
             // The mallet has struck the puck. Now send the puck flying
             // based on the mallet velocity.
             puckVector = new Vector(-puckVector.x, -puckVector.y, -puckVector.z);
+         //   puckVector = puckVector.scale(this.getDifficultyFactor());
         }
 
 
@@ -428,7 +439,7 @@ public class AirHockeyRenderer implements Renderer {
         );
 
         // Friction factor
-        puckVector = puckVector.scale(0.99f);
+        puckVector = puckVector.scale(this.getDifficultyFactor());
 
         // Update the viewProjection matrix, and create an inverted matrix for
         // touch picking.
@@ -481,5 +492,27 @@ public class AirHockeyRenderer implements Renderer {
         translateM(modelMatrix, 0, x, y, z);
         multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix,
                 0, modelMatrix, 0);
+    }
+    private float getDifficultyFactor()
+    {
+        return (float) this.difficultyFactor;
+    }
+
+
+    private void setDifficultyFactor()
+    {
+        if (this.difficulty == 0){
+            this.difficultyFactor = 0.995f;
+        }
+        else if (this.difficulty == 1){
+            this.difficultyFactor = 1f;
+        }
+        else if (this.difficulty == 2)
+        {
+            this.difficultyFactor = 1.005f;
+        }
+        else{
+            this.difficultyFactor = 1;
+        }
     }
 }
