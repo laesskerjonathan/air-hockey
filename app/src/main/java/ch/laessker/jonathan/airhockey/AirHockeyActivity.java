@@ -9,6 +9,7 @@ import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -47,8 +48,8 @@ public class AirHockeyActivity extends Activity {
             SettingsValues values = helper.returnSavedValues();
             int difficulty = values.getDifficulty();
             game.setValues(1, difficulty, p1, p2);
-            Toast.makeText(AirHockeyActivity.this, "Game started" +
-                    "\nDifficulty: " + difficulty, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(AirHockeyActivity.this, "Game started" +
+            //        "\nDifficulty: " + difficulty, Toast.LENGTH_SHORT).show();
         } else {
             game= Game.getInstance();
             DBHelper helper = new DBHelper(getApplicationContext());
@@ -132,6 +133,7 @@ public class AirHockeyActivity extends Activity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event != null) {
+
                     // Convert touch coordinates into normalized device
                     // coordinates, keeping in mind that Android's Y
                     // coordinates are inverted.
@@ -139,35 +141,121 @@ public class AirHockeyActivity extends Activity {
                             (event.getX() / (float) v.getWidth()) * 2 - 1;
                     final float normalizedY =
                             -((event.getY() / (float) v.getHeight()) * 2 - 1);
-                    int actionPeformed = event.getAction();
+                    int actionPeformed = event.getAction() & MotionEvent.ACTION_MASK;
 
+                    int pointerCount = event.getPointerCount();
+
+                    if(pointerCount > 1)
+                    {
+                        Log.d("Pointercountgreaterone", Integer.toString(pointerCount));
+                    }
 
                     switch(actionPeformed) {
                         case MotionEvent.ACTION_DOWN:
-                            glSurfaceView.queueEvent(new Runnable() {
-                                @Override
-                                public void run() {
-                                    airHockeyRenderer.handleTouchPress(
-                                            normalizedX, normalizedY);
-                                }
-                            });
-
                         case MotionEvent.ACTION_POINTER_DOWN:
-                            glSurfaceView.queueEvent(new Runnable() {
-                                @Override
-                                public void run() {
-                                    airHockeyRenderer.handleTouchPress(
-                                            normalizedX, normalizedY);
+
+                            Log.d("Pointer CountDown", Integer.toString(pointerCount));
+                            for(int i = 0; i < pointerCount; ++i)
+                            {
+                                final int pointerIndex = i;
+                                final int pointerId = event.getPointerId(pointerIndex);
+                                Log.d("pointer pressedDown","asdfasdf" + Integer.toString(pointerId));
+                                if(pointerId == 0)
+                                {
+                                    final float fingerOneX = 2f * (event.getX(pointerIndex) / v.getWidth()) - 1f;
+                                    final float fingerOneY = -2f * (event.getY(pointerIndex) / v.getHeight()) + 1f;
+
+                                    glSurfaceView.queueEvent(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            airHockeyRenderer.handleTouchPress(
+                                                    fingerOneX, fingerOneY, pointerId);
+                                        }
+                                    });
                                 }
-                            });
+                                if(pointerId == 1)
+                                {
+                                    final float fingerTwoX = 2f * (event.getX(pointerIndex) / v.getWidth()) - 1f;
+                                    final float fingerTwoY = -2f * (event.getY(pointerIndex) / v.getHeight()) + 1f;
+                                    glSurfaceView.queueEvent(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            airHockeyRenderer.handleTouchPress(
+                                                    fingerTwoX, fingerTwoY, pointerId);
+                                        }
+                                    });
+                                }
+                            }
+                            break;
                         case MotionEvent.ACTION_MOVE: {
-                            glSurfaceView.queueEvent(new Runnable() {
-                                @Override
-                                public void run() {
-                                    airHockeyRenderer.handleTouchDrag(
-                                            normalizedX, normalizedY);
+
+                            for(int i = 0; i < pointerCount; ++i)
+                            {
+                                final int pointerIndex = i;
+                                final int pointerId = event.getPointerId(pointerIndex);
+                                Log.d("pointer id - move","asdfasdf" + Integer.toString(pointerId));
+                                if(pointerId == 0)
+                                {
+                                    final float fingerOneX = 2f * (event.getX(pointerIndex) / v.getWidth()) - 1f;
+                                    final float fingerOneY = -2f * (event.getY(pointerIndex) / v.getHeight()) + 1f;
+
+                                    glSurfaceView.queueEvent(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            airHockeyRenderer.handleTouchDrag(
+                                                    fingerOneX, fingerOneY, pointerId);
+                                        }
+                                    });
                                 }
-                            });
+                                if(pointerId == 1)
+                                {
+                                    final float fingerTwoX = 2f * (event.getX(pointerIndex) / v.getWidth()) - 1f;
+                                    final float fingerTwoY = -2f * (event.getY(pointerIndex) / v.getHeight()) + 1f;
+                                    glSurfaceView.queueEvent(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            airHockeyRenderer.handleTouchDrag(
+                                                    fingerTwoX, fingerTwoY, pointerId);
+                                        }
+                                    });
+                                }
+                            }
+                            break;
+                        }
+                        case MotionEvent.ACTION_UP:
+                        case MotionEvent.ACTION_POINTER_UP:
+                        {
+                            for(int i = 0; i < pointerCount; ++i)
+                            {
+                                final int pointerIndex = i;
+                                final int pointerId = event.getPointerId(pointerIndex);
+                                Log.d("pointer id - move","asdfasdf" + Integer.toString(pointerId));
+                                if(pointerId == 0)
+                                {
+                                    final float fingerOneX = 2f * (event.getX(pointerIndex) / v.getWidth()) - 1f;
+                                    final float fingerOneY = -2f * (event.getY(pointerIndex) / v.getHeight()) + 1f;
+
+                                    glSurfaceView.queueEvent(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            airHockeyRenderer.handleTouchUp(
+                                                    fingerOneX, fingerOneY, pointerId);
+                                        }
+                                    });
+                                }
+                                if(pointerId == 1)
+                                {
+                                    final float fingerTwoX = 2f * (event.getX(pointerIndex) / v.getWidth()) - 1f;
+                                    final float fingerTwoY = -2f * (event.getY(pointerIndex) / v.getHeight()) + 1f;
+                                    glSurfaceView.queueEvent(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            airHockeyRenderer.handleTouchUp(
+                                                    fingerTwoX, fingerTwoY, pointerId);
+                                        }
+                                    });
+                                }
+                            }
                         }
 
                     }

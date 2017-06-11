@@ -26,6 +26,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.app.Activity;
 import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
+import android.util.Log;
 import android.widget.Toast;
 
 import ch.laessker.jonathan.airhockey.game.Game;
@@ -67,8 +68,8 @@ public class AirHockeyRenderer implements Renderer {
 
     private int texture;
 
-    private boolean malletPressedP1 = false;
-    private boolean malletPressedP2 = false;
+    private int malletPressedP1 = -1;
+    private int malletPressedP2 = -1;
     private Point P1MalletPosition;
     private Point P2MalletPosition;
 
@@ -92,6 +93,7 @@ public class AirHockeyRenderer implements Renderer {
 
     private Point previousP1MalletPosition;
     private Point previousP2MalletPosition;
+    private int malletsActive = 0;
 
     private Point puckPosition;
     private Vector puckVector;
@@ -102,8 +104,8 @@ public class AirHockeyRenderer implements Renderer {
         this.game = game;
     }
 
-    public void handleTouchPress(float normalizedX, float normalizedY) {
-
+    public void handleTouchPress(float normalizedX, float normalizedY, int pointerId) {
+        Log.d("touchpress", Integer.toString(pointerId));
         Ray ray = convertNormalized2DPointToRay(normalizedX, normalizedY);
 
         // Now test if this ray intersects with the mallet by creating a
@@ -125,8 +127,15 @@ public class AirHockeyRenderer implements Renderer {
         // If the ray intersects (if the user touched a part of the screen that
         // intersects the mallet's bounding sphere), then set malletPressed =
         // true.
-        malletPressedP1 = Geometry.intersects(malletBoundingSphereP1, ray);
-        malletPressedP2 = Geometry.intersects(malletBoundingSphereP2, ray);
+        Log.d("intersects1", Boolean.toString(Geometry.intersects(malletBoundingSphereP1, ray)));
+        Log.d("intersects2", Boolean.toString(Geometry.intersects(malletBoundingSphereP2, ray)));
+
+        if(Geometry.intersects(malletBoundingSphereP1, ray)) {
+            malletPressedP1 = pointerId;
+        }
+        if(Geometry.intersects(malletBoundingSphereP2, ray)){
+            malletPressedP2 = pointerId ;
+        }
     }
 
     private Ray convertNormalized2DPointToRay(
@@ -171,10 +180,39 @@ public class AirHockeyRenderer implements Renderer {
         vector[2] /= vector[3];
     }
 
+    public void handleTouchUp(float normalizedX, float normalizedY, int pointerId){
+        Ray ray = convertNormalized2DPointToRay(normalizedX, normalizedY);
 
-    public void handleTouchDrag(float normalizedX, float normalizedY) {
+        // Now test if this ray intersects with the mallet by creating a
+        // bounding sphere that wraps the mallet.
+        Sphere malletBoundingSphereP1 = new Sphere(new Point(
+                P1MalletPosition.x,
+                P1MalletPosition.y,
+                P1MalletPosition.z),
+                malletP1.height / 2f);
 
-        if (malletPressedP1) {
+        // Now test if this ray intersects with the mallet by creating a
+        // bounding sphere that wraps the mallet.
+        Sphere malletBoundingSphereP2 = new Sphere(new Point(
+                P2MalletPosition.x,
+                P2MalletPosition.y,
+                P2MalletPosition.z),
+                malletP2.height / 2f);
+
+        // If the ray intersects (if the user touched a part of the screen that
+        // intersects the mallet's bounding sphere), then set malletPressed =
+        // true.
+        if(Geometry.intersects(malletBoundingSphereP1, ray))
+            malletPressedP1 = -1;
+        if(Geometry.intersects(malletBoundingSphereP2, ray))
+            malletPressedP2 = -1;
+    }
+
+
+    public void handleTouchDrag(float normalizedX, float normalizedY, int pointerId) {
+
+        if (malletPressedP1 == pointerId) {
+            Log.d("malletPressedP1", Integer.toString(pointerId));
             Ray ray = convertNormalized2DPointToRay(normalizedX, normalizedY);
             // Define a plane representing our air hockey table.
             Plane plane = new Plane(new Point(0, 0, 0), new Vector(0, 1, 0));
@@ -207,8 +245,9 @@ public class AirHockeyRenderer implements Renderer {
                 puckVector = puckVector.scale(0.9f);
             }
         }
-        if(malletPressedP2)
+        if(malletPressedP2 == pointerId)
         {
+            Log.d("malletPressedP2", Integer.toString(pointerId));
             Ray ray = convertNormalized2DPointToRay(normalizedX, normalizedY);
             // Define a plane representing our air hockey table.
             Plane plane = new Plane(new Point(0, 0, 0), new Vector(0, 1, 0));
