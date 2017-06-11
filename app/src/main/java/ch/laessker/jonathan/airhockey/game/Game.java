@@ -18,7 +18,7 @@ import ch.laessker.jonathan.airhockey.util.DBHelper;
 
 public class Game {
     private static Game instance = null;
-    private final int MAXPOINTS = 2;
+    private final int MAXPOINTS = 10;
     private int id;
     private int duration;
     private int difficulty;
