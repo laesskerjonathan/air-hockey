@@ -16,29 +16,24 @@ public class Statistics extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
 
+        showStatistics();
 
-        DBHelper helper = new DBHelper(getApplicationContext());
-        StatisticsValues stats = helper.getStatistics();
-
-        TextView player1Text = (TextView) findViewById(R.id.player_points);
-        TextView player2Text = (TextView) findViewById(R.id.enemy_points);
-        TextView durationText = (TextView) findViewById(R.id.play_time);
-
-        player1Text.setText(Integer.toString(stats.getPlayer1Points()));
-        player2Text.setText(Integer.toString(stats.getPlayer2Points()));
-        durationText.setText(Integer.toString(stats.getDuration()));
-
-        Log.d("statisticsoncreate", "");
 
     }
 
     @Override
     protected void onResume(){
         super.onResume();
+    }
+
+    private void showStatistics(){
 
         DBHelper helper = new DBHelper(getApplicationContext());
         StatisticsValues stats = helper.getStatistics();
 
+        int duration = (int) (long) stats.getDuration();
+
+        Log.d("getduration", Long.toString(stats.getDuration()));
 
         TextView player1Text = (TextView) findViewById(R.id.player_points);
         TextView player2Text = (TextView) findViewById(R.id.enemy_points);
@@ -46,10 +41,9 @@ public class Statistics extends AppCompatActivity {
 
         player1Text.setText(Integer.toString(stats.getPlayer1Points()));
         player2Text.setText(Integer.toString(stats.getPlayer2Points()));
-        durationText.setText(Integer.toString(stats.getDuration()));
+        durationText.setText(Integer.toString(duration / 60) + "m " + Integer.toString(duration % 60) + "s");
 
         Log.d("statisticsoncreate", "");
-
     }
 
 }

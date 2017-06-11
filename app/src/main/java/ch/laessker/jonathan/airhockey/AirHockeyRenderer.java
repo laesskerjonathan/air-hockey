@@ -80,6 +80,8 @@ public class AirHockeyRenderer implements Renderer {
 
     private int texture;
 
+    private Long timestamp;
+
 
     private int malletPressedP1 = -1;
     private int malletPressedP2 = -1;
@@ -121,6 +123,7 @@ public class AirHockeyRenderer implements Renderer {
         DBHelper helper = new DBHelper(context);
         areEffectsOn = helper.returnSavedValues().getEffects();
 
+        timestamp = System.currentTimeMillis()/1000;
     }
 
     public void handleTouchPress(float normalizedX, float normalizedY, int pointerId) {
@@ -402,6 +405,7 @@ public class AirHockeyRenderer implements Renderer {
                                     "\nPlayer 2: " + game.getScore(2), Toast.LENGTH_SHORT).show();
                         }
                     });
+                    game.setDuration(System.currentTimeMillis()/1000 - timestamp);
                     game.checkWin(activity);
                 }
             puckVector = new Vector(puckVector.x, puckVector.y, -puckVector.z);
@@ -423,6 +427,8 @@ public class AirHockeyRenderer implements Renderer {
                                 "\nPlayer 2: " + game.getScore(2), Toast.LENGTH_SHORT).show();
                     }
                 });
+
+                game.setDuration(System.currentTimeMillis()/1000 - timestamp);
                 game.checkWin(activity);
             }
             puckVector = new Vector(puckVector.x, puckVector.y, -puckVector.z);

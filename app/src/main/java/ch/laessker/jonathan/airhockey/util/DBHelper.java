@@ -161,7 +161,7 @@ public class DBHelper {
         cursor.moveToNext();
         int player1 = cursor.getInt(0);
         int player2 = cursor.getInt(1);
-        int duration = cursor.getInt(2);
+        Long duration = (long) cursor.getInt(2);
 
         StatisticsValues values = new StatisticsValues(player1, player2, duration);
 

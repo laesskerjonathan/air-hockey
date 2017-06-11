@@ -20,7 +20,7 @@ public class Game {
     private static Game instance = null;
     private final int MAXPOINTS = 10;
     private int id;
-    private int duration;
+    private Long duration;
     private int difficulty;
 
     private Player player1;
@@ -52,7 +52,7 @@ public class Game {
         this.difficulty = difficulty;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(Long duration) {
         this.duration = duration;
     }
 
@@ -68,7 +68,7 @@ public class Game {
         return difficulty;
     }
 
-    public int getDuration() {
+    public Long getDuration() {
         return duration;
     }
 

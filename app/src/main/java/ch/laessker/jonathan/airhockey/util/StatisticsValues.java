@@ -7,10 +7,10 @@ package ch.laessker.jonathan.airhockey.util;
 public class StatisticsValues {
     private int player1Points;
     private int player2Points;
-    private int duration;
+    private Long duration;
 
 
-    public StatisticsValues(int player1Points, int player2Points, int duration){
+    public StatisticsValues(int player1Points, int player2Points, Long duration){
         this.player1Points = player1Points;
         this.player2Points = player2Points;
         this.duration = duration;
@@ -24,7 +24,7 @@ public class StatisticsValues {
         return player2Points;
     }
 
-    public int getDuration(){
+    public Long getDuration(){
         return duration;
     }
 }
