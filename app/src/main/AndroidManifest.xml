@@ -23,6 +23,9 @@
         <service
             android:name=".data.BackgroundMusicService"
             android:enabled="true" />
+        <service
+            android:name=".data.soundEffectsService"
+            android:enabled="true" />
 
         <activity android:name=".SettingsMenu" />
         <activity android:name=".Statistics" />

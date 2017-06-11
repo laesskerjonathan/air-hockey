@@ -51,8 +51,6 @@ public class SettingsMenu extends AppCompatActivity {
         int soundtrack = settingsValues.getSoundtrack();
         int difficulty = settingsValues.getDifficulty();
 
-        Toast.makeText(SettingsMenu.this, "Settings Loaded: effects: " + effects + ", soundtrack: " + soundtrack + ", difficulty: " + difficulty, Toast.LENGTH_LONG).show();
-
         Button saveSettingsButton = (Button) findViewById(R.id.button);
 
         final Switch effectSwitch = (Switch) findViewById(R.id.switch_effects);
@@ -75,7 +73,6 @@ public class SettingsMenu extends AppCompatActivity {
 
                 helper.setValues(effects, soundtrack, difficulty);
 
-                Toast.makeText(SettingsMenu.this, "Settings Saved: effects: " + effects + ", soundtrack: " + soundtrack + ", difficulty: " + difficulty, Toast.LENGTH_LONG).show();
                 final Intent i = new Intent(SettingsMenu.this, HauptMenu.class);
                 startActivity(i);
             }

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.view.View;
 import ch.laessker.jonathan.airhockey.data.BackgroundMusicService;
+import ch.laessker.jonathan.airhockey.data.soundEffectsService;
+import ch.laessker.jonathan.airhockey.util.DBHelper;
 
 public class HauptMenu extends AppCompatActivity {
 
@@ -19,8 +21,6 @@ public class HauptMenu extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        serviceIntent = new Intent(this,BackgroundMusicService.class);
-        startService(serviceIntent);
         setContentView(R.layout.activity_haupt_menu);
 
         singlePlayerButton = (Button) findViewById(R.id.single_player_pre_game);
@@ -56,13 +56,41 @@ public class HauptMenu extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        //TODO: Load Settings from Database and start the FUN (Music & Effects)
+
+        serviceIntent = new Intent(HauptMenu.this,BackgroundMusicService.class);
+
+        DBHelper helper = new DBHelper(getApplicationContext());
+        int musicIsOn = helper.returnSavedValues().getSoundtrack();
+
+        if(musicIsOn == 1){
+            startService(serviceIntent);
+        } else {
+            stopService(serviceIntent);
+        }
+
+
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         stopService(serviceIntent);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+
+        DBHelper helper = new DBHelper(getApplicationContext());
+        int musicIsOn = helper.returnSavedValues().getSoundtrack();
+
+        if(musicIsOn == 1){
+            startService(serviceIntent);
+        } else {
+            stopService(serviceIntent);
+        }
+
     }
 
 }

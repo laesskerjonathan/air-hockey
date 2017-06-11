@@ -25,10 +25,14 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
 import android.widget.Toast;
 
+import ch.laessker.jonathan.airhockey.data.soundEffectsService;
 import ch.laessker.jonathan.airhockey.game.Game;
 import ch.laessker.jonathan.airhockey.objects.Mallet;
 import ch.laessker.jonathan.airhockey.objects.Puck;
@@ -49,6 +53,11 @@ import ch.laessker.jonathan.airhockey.util.TextureHelper;
 public class AirHockeyRenderer implements Renderer {
     private final Context context;
     private final Activity activity;
+
+    private int areEffectsOn;
+    private MediaPlayer smack;
+    private MediaPlayer ding;
+    private soundEffectsService mEffects = new soundEffectsService();
 
     private final float[] projectionMatrix = new float[16];
     private final float[] modelMatrix = new float[16];
@@ -106,6 +115,12 @@ public class AirHockeyRenderer implements Renderer {
         this.context = activity.getApplicationContext();
         this.activity = activity;
         this.game = game;
+        smack = MediaPlayer.create(context, R.raw.smack);
+        ding = MediaPlayer.create(context, R.raw.ding);
+
+        DBHelper helper = new DBHelper(context);
+        areEffectsOn = helper.returnSavedValues().getEffects();
+
     }
 
     public void handleTouchPress(float normalizedX, float normalizedY, int pointerId) {
@@ -242,6 +257,7 @@ public class AirHockeyRenderer implements Renderer {
                     Geometry.vectorBetween(P1MalletPosition, puckPosition).length();
 
             if (distance <= (puck.radius + malletP1.radius)) {
+                smackSound();
                 // The mallet has struck the puck. Now send the puck flying
                 // based on the mallet velocity.
                 puckVector = Geometry.vectorBetween(
@@ -288,6 +304,7 @@ public class AirHockeyRenderer implements Renderer {
                     Geometry.vectorBetween(P2MalletPosition, puckPosition).length();
 
             if (distance <= (puck.radius + malletP2.radius)) {
+                smackSound();
                 // The mallet has struck the puck. Now send the puck flying
                 // based on the mallet velocity.
                 puckVector = Geometry.vectorBetween(
@@ -374,6 +391,7 @@ public class AirHockeyRenderer implements Renderer {
             // check if goal
                 if (puckPosition.x < wideHalfGoal && puckPosition.x > -wideHalfGoal )
                 {
+                    dingSound();
                     //this is a goal for player 1
                     game.increaseScore(1,1);
 
@@ -395,6 +413,7 @@ public class AirHockeyRenderer implements Renderer {
             // check if goal
             if (puckPosition.x < wideHalfGoal && puckPosition.x > -wideHalfGoal )
             {
+                dingSound();
                 //this is a goal for player 2
                 game.increaseScore(2, 1);
                 activity.runOnUiThread(new Runnable() {
@@ -415,6 +434,7 @@ public class AirHockeyRenderer implements Renderer {
 
 
         if (distanceP2 <= (puck.radius + malletP2.radius)) {
+            smackSound();
             // The mallet has struck the puck. Now send the puck flying
             // based on the mallet velocity.
             puckVector = new Vector(-puckVector.x, -puckVector.y, -puckVector.z);
@@ -422,6 +442,7 @@ public class AirHockeyRenderer implements Renderer {
         }
 
         if (distanceP1 <= (puck.radius + malletP2.radius)) {
+            smackSound();
             // The mallet has struck the puck. Now send the puck flying
             // based on the mallet velocity.
             puckVector = new Vector(-puckVector.x, -puckVector.y, -puckVector.z);
@@ -513,6 +534,33 @@ public class AirHockeyRenderer implements Renderer {
         }
         else{
             this.difficultyFactor = 1;
+        }
+    }
+
+    private void smackSound(){
+
+        if (areEffectsOn == 1) {
+            if (smack != null) {
+                smack.stop();
+                smack.release();
+            }
+            smack = MediaPlayer.create(context, R.raw.smack);
+            if (smack != null)
+                smack.start();
+            smack.start();
+        }
+    }
+    private void dingSound() {
+
+        if (areEffectsOn == 1) {
+            if (ding != null) {
+                ding.stop();
+                ding.release();
+            }
+            ding = MediaPlayer.create(context, R.raw.ding);
+            if (ding != null)
+                ding.start();
+            ding.start();
         }
     }
 }

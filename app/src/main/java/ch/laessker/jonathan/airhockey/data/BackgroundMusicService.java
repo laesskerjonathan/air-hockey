@@ -20,7 +20,7 @@ public class BackgroundMusicService extends Service {
     {
         mp = MediaPlayer.create(this, R.raw.urameshimusic);
         mp.start();
-        mp.setLooping(false);
+        mp.setLooping(true);
     }
     public void onDestroy(){
         mp.stop();
