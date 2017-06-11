@@ -18,7 +18,7 @@ public class BackgroundMusicService extends Service {
     }
     public void onCreate()
     {
-        mp = MediaPlayer.create(this, R.raw.urameshimusic);
+        mp = MediaPlayer.create(this, R.raw.urameshimusic2);
         mp.start();
         mp.setLooping(true);
     }

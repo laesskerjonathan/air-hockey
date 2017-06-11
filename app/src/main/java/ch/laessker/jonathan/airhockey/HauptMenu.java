@@ -65,6 +65,7 @@ public class HauptMenu extends AppCompatActivity {
 
         if(musicIsOn == 1){
             startService(serviceIntent);
+
         } else {
             stopService(serviceIntent);
         }
