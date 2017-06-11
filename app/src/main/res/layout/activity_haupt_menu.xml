@@ -13,13 +13,15 @@
     tools:ignore="ExtraText">
 
     <TextView
-        android:text="@string/game_name"
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
-        android:id="@+id/textView2" />
+        android:fontFamily="casual"
+        android:text="@string/game_name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
     <Button
         android:id="@+id/single_player_pre_game"
@@ -50,7 +52,8 @@
         android:id="@+id/statisticb"
         android:background="@drawable/oval"
         android:layout_centerVertical="true"
-        android:layout_alignStart="@+id/single_player_pre_game" />
+        android:layout_alignStart="@+id/single_player_pre_game"
+        android:layout_alignEnd="@+id/single_player_pre_game" />
 
 <!--    <Button
         android:text="@string/highscore"
