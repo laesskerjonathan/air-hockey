@@ -68,6 +68,7 @@ public class AirHockeyRenderer implements Renderer {
 
     private int texture;
 
+
     private int malletPressedP1 = -1;
     private int malletPressedP2 = -1;
     private Point P1MalletPosition;
@@ -243,6 +244,16 @@ public class AirHockeyRenderer implements Renderer {
                 puckVector = Geometry.vectorBetween(
                         previousP1MalletPosition, P1MalletPosition);
                 puckVector = puckVector.scale(0.9f);
+
+                float distanceP1 =  Geometry.vectorBetween(P1MalletPosition, puckPosition.translate(puckVector)).length();
+
+                if(distanceP1 <= (puck.radius + malletP1.radius)){
+                    Log.d("Puckstuck", "puckstuck");
+                    if(puckVector.length() != 0) {
+                        puckPosition = puckPosition.translate(puckVector.scale(1 / puckVector.length() * 0.05f));
+                    }
+                }
+
             }
         }
         if(malletPressedP2 == pointerId)
@@ -279,6 +290,14 @@ public class AirHockeyRenderer implements Renderer {
                 puckVector = Geometry.vectorBetween(
                         previousP2MalletPosition, P2MalletPosition);
                 puckVector = puckVector.scale(0.9f);
+
+                float distanceP2 =  Geometry.vectorBetween(P2MalletPosition, puckPosition.translate(puckVector)).length();
+
+                if(distanceP2 <= (puck.radius + malletP2.radius)){
+                    if(puckVector.length() != 0) {
+                        puckPosition = puckPosition.translate(puckVector.scale(1 / puckVector.length() * 0.05f));
+                    }
+                }
             }
         }
 
@@ -385,7 +404,7 @@ public class AirHockeyRenderer implements Renderer {
 
 
 
-        // TODO FIX COLLISION BUG
+
         if (distanceP2 <= (puck.radius + malletP2.radius)) {
             // The mallet has struck the puck. Now send the puck flying
             // based on the mallet velocity.
@@ -397,7 +416,6 @@ public class AirHockeyRenderer implements Renderer {
             // based on the mallet velocity.
             puckVector = new Vector(-puckVector.x, -puckVector.y, -puckVector.z);
         }
-
 
 
 
