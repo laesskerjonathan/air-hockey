@@ -331,7 +331,7 @@ public class AirHockeyRenderer implements Renderer {
         textureProgram = new TextureShaderProgram(context);
         colorProgram = new ColorShaderProgram(context);
 
-        texture = TextureHelper.loadTexture(context, R.drawable.air_hockey_surface_v2);
+        texture = TextureHelper.loadTexture(context, R.drawable.gamefieldv4);
 
     }
 
