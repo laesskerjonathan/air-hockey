@@ -24,7 +24,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
     <Button
-        android:id="@+id/single_player_pre_game"
+        android:id="@+id/multi_player_pre_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView2"
@@ -32,7 +32,7 @@
         android:layout_marginTop="32dp"
         android:background="@drawable/oval"
         android:elevation="6dp"
-        android:text="@string/single_player" />
+        android:text="@string/multi_player" />
 
     <Button
         android:id="@+id/settingsb"
@@ -52,8 +52,8 @@
         android:id="@+id/statisticb"
         android:background="@drawable/oval"
         android:layout_centerVertical="true"
-        android:layout_alignStart="@+id/single_player_pre_game"
-        android:layout_alignEnd="@+id/single_player_pre_game" />
+        android:layout_alignStart="@+id/multi_player_pre_game"
+        android:layout_alignEnd="@+id/multi_player_pre_game" />
 
 <!--    <Button
         android:text="@string/highscore"

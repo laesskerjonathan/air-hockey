@@ -2,18 +2,9 @@ package ch.laessker.jonathan.airhockey.game;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
-import java.io.Serializable;
-
-import ch.laessker.jonathan.airhockey.AirHockeyActivity;
 import ch.laessker.jonathan.airhockey.GameFinished;
-import ch.laessker.jonathan.airhockey.HauptMenu;
-import ch.laessker.jonathan.airhockey.SettingsMenu;
-import ch.laessker.jonathan.airhockey.SinglePlayerPreGame;
-import ch.laessker.jonathan.airhockey.objects.Puck;
 import ch.laessker.jonathan.airhockey.util.DBHelper;
 
 public class Game {

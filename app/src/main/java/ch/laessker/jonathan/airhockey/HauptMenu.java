@@ -3,11 +3,9 @@ package ch.laessker.jonathan.airhockey;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.widget.Button;
 import android.view.View;
 import ch.laessker.jonathan.airhockey.data.BackgroundMusicService;
-import ch.laessker.jonathan.airhockey.data.soundEffectsService;
 import ch.laessker.jonathan.airhockey.util.DBHelper;
 
 public class HauptMenu extends AppCompatActivity {
@@ -24,11 +22,11 @@ public class HauptMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_haupt_menu);
 
-        singlePlayerButton = (Button) findViewById(R.id.single_player_pre_game);
+        singlePlayerButton = (Button) findViewById(R.id.multi_player_pre_game);
 
         singlePlayerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                final Intent i = new Intent(HauptMenu.this,SinglePlayerPreGame.class);
+                final Intent i = new Intent(HauptMenu.this,PreGame.class);
                 startActivity(i);
             }
         });

@@ -32,7 +32,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".Statistics"
             android:screenOrientation="portrait"/>
-        <activity android:name=".SinglePlayerPreGame"
+        <activity android:name=".PreGame"
             android:screenOrientation="portrait"/>
         <activity android:name=".PauseMenu"
             android:screenOrientation="portrait"/>
