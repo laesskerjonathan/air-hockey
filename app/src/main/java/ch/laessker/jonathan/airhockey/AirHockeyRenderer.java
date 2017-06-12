@@ -355,6 +355,12 @@ public class AirHockeyRenderer implements Renderer {
 
     }
 
+    public void resetPosition() {
+        P1MalletPosition = new Point(0f, malletP1.height / 2f, 0.4f);
+        P2MalletPosition = new Point(0f, malletP2.height / 2f, -0.4f);
+        puckPosition = new Point(0f, puck.height / 2f, 0.25f);
+        puckVector = new Vector(0f, 0f, 0f);
+    }
     @Override
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {
         // Set the OpenGL viewport to fill the entire surface.
@@ -407,6 +413,7 @@ public class AirHockeyRenderer implements Renderer {
                     });
                     game.setDuration(System.currentTimeMillis()/1000 - timestamp);
                     game.checkWin(activity);
+                    this.resetPosition();
                 }
             puckVector = new Vector(puckVector.x, puckVector.y, -puckVector.z);
             puckVector = puckVector.scale(0.9f);
@@ -430,6 +437,7 @@ public class AirHockeyRenderer implements Renderer {
 
                 game.setDuration(System.currentTimeMillis()/1000 - timestamp);
                 game.checkWin(activity);
+                this.resetPosition();
             }
             puckVector = new Vector(puckVector.x, puckVector.y, -puckVector.z);
             puckVector = puckVector.scale(0.9f);
