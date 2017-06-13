@@ -127,7 +127,7 @@ public class AirHockeyRenderer implements Renderer {
     }
 
     public void handleTouchPress(float normalizedX, float normalizedY, int pointerId) {
-        Log.d("touchpress", Integer.toString(pointerId));
+        //Log.d("touchpress", Integer.toString(pointerId));
         Ray ray = convertNormalized2DPointToRay(normalizedX, normalizedY);
 
         // Now test if this ray intersects with the mallet by creating a
@@ -149,8 +149,8 @@ public class AirHockeyRenderer implements Renderer {
         // If the ray intersects (if the user touched a part of the screen that
         // intersects the mallet's bounding sphere), then set malletPressed =
         // true.
-        Log.d("intersects1", Boolean.toString(Geometry.intersects(malletBoundingSphereP1, ray)));
-        Log.d("intersects2", Boolean.toString(Geometry.intersects(malletBoundingSphereP2, ray)));
+        //Log.d("intersects1", Boolean.toString(Geometry.intersects(malletBoundingSphereP1, ray)));
+        //Log.d("intersects2", Boolean.toString(Geometry.intersects(malletBoundingSphereP2, ray)));
 
         if(Geometry.intersects(malletBoundingSphereP1, ray)) {
             malletPressedP1 = pointerId;
@@ -234,7 +234,7 @@ public class AirHockeyRenderer implements Renderer {
     public void handleTouchDrag(float normalizedX, float normalizedY, int pointerId) {
 
         if (malletPressedP1 == pointerId) {
-            Log.d("malletPressedP1", Integer.toString(pointerId));
+            //Log.d("malletPressedP1", Integer.toString(pointerId));
             Ray ray = convertNormalized2DPointToRay(normalizedX, normalizedY);
             // Define a plane representing our air hockey table.
             Plane plane = new Plane(new Point(0, 0, 0), new Vector(0, 1, 0));
@@ -270,7 +270,7 @@ public class AirHockeyRenderer implements Renderer {
                 float distanceP1 =  Geometry.vectorBetween(P1MalletPosition, puckPosition.translate(puckVector)).length();
 
                 if(distanceP1 <= (puck.radius + malletP1.radius)){
-                    Log.d("Puckstuck", "puckstuck");
+                    //Log.d("Puckstuck", "puckstuck");
                     if(puckVector.length() != 0) {
                         puckPosition = puckPosition.translate(puckVector.scale(1 / puckVector.length() * 0.05f));
                     }
@@ -280,7 +280,7 @@ public class AirHockeyRenderer implements Renderer {
         }
         if(malletPressedP2 == pointerId)
         {
-            Log.d("malletPressedP2", Integer.toString(pointerId));
+            //Log.d("malletPressedP2", Integer.toString(pointerId));
             Ray ray = convertNormalized2DPointToRay(normalizedX, normalizedY);
             // Define a plane representing our air hockey table.
             Plane plane = new Plane(new Point(0, 0, 0), new Vector(0, 1, 0));
@@ -337,8 +337,8 @@ public class AirHockeyRenderer implements Renderer {
 
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         table = new Table();
-        malletP1 = new Mallet(0.05f, 0.10f, 64);
-        malletP2 = new Mallet(0.05f, 0.10f, 64);
+        malletP1 = new Mallet(0.08f, 0.10f, 64);
+        malletP2 = new Mallet(0.08f, 0.10f, 64);
         puck = new Puck(0.03f, 0.02f, 64);
 
         P1MalletPosition = new Point(0f, malletP1.height / 2f, 0.4f);

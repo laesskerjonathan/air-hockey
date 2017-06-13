@@ -154,12 +154,12 @@ public class AirHockeyActivity extends Activity {
                         case MotionEvent.ACTION_DOWN:
                         case MotionEvent.ACTION_POINTER_DOWN:
 
-                            Log.d("Pointer CountDown", Integer.toString(pointerCount));
+                            //Log.d("Pointer CountDown", Integer.toString(pointerCount));
                             for(int i = 0; i < pointerCount; ++i)
                             {
                                 final int pointerIndex = i;
                                 final int pointerId = event.getPointerId(pointerIndex);
-                                Log.d("pointer pressedDown","asdfasdf" + Integer.toString(pointerId));
+                                //Log.d("pointer pressedDown","asdfasdf" + Integer.toString(pointerId));
                                 if(pointerId == 0)
                                 {
                                     final float fingerOneX = 2f * (event.getX(pointerIndex) / v.getWidth()) - 1f;
@@ -229,7 +229,7 @@ public class AirHockeyActivity extends Activity {
                             {
                                 final int pointerIndex = i;
                                 final int pointerId = event.getPointerId(pointerIndex);
-                                Log.d("pointer id - move","asdfasdf" + Integer.toString(pointerId));
+                                //Log.d("pointer id - move","asdfasdf" + Integer.toString(pointerId));
                                 if(pointerId == 0)
                                 {
                                     final float fingerOneX = 2f * (event.getX(pointerIndex) / v.getWidth()) - 1f;
